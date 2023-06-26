@@ -1,7 +1,7 @@
 # Compiling
-The files are written in plain Python without any dependences (other than `math`
-and `random` from the standard library). You can run with `CPython` and `PyPy`.
-For example:
+The files are written in plain Python without any dependences (other than `io`,
+`math`, and `random` from the standard library). You can run with `CPython`
+and `PyPy`. For example:
 ```
 python3 newtonian_black_hole.py
 ```
