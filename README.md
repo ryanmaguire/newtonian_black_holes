@@ -9,7 +9,7 @@ black holes using (and slightly abusing) Newtonian mechanics.
 
 Newtonian mechanics predicts the existence of black holes.
 Take the escape velocity formula and apply it to the speed of light.
-The result is the the Schwarzschild radius, which is the same
+The result is the Schwarzschild radius, which is the same
 formula one derives if they were to perform to full general
 relativistic calculation.
 $$R=\frac{2GM}{c^{2}}$$
