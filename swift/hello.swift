@@ -28,7 +28,7 @@ import Foundation
 #endif
 
 /*  Function for printing a simple message. Demonstrates basic syntax.        */
-func MyPrintFunction(x: Double) -> String {
+func myPrintFunction(x: Double) -> String {
 
     /*  The sqrt function is imported from the C standard library above.      */
     let y: Double = sqrt(x)
@@ -39,13 +39,13 @@ func MyPrintFunction(x: Double) -> String {
         \rsqrt(\(x)) = \(y)
     """
 }
-/*  End of MyPrintFunction.                                                   */
+/*  End of myPrintFunction.                                                   */
 
 /*  The input to the function.                                                */
 let input: Double = 2.0
 
 /*  The output. Pass the input to the function.                               */
-let output: String = MyPrintFunction(x: input)
+let output: String = myPrintFunction(x: input)
 
 /*  The print function appends a newline automatically.                       */
 print(output)
