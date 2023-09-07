@@ -55,13 +55,15 @@ do look like what one might expect a black hole to be.
 | Go                     | gccgo          |   27.201 | -O3 -flto          | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
 | C++                    | g++            |   27.566 | -O3 -flto          | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
 | C++                    | clang++        |   29.547 | -O3 -flto          | Debian clang version 11.0.1-2            |
+| Rust                   | rustc          |   39.086 | -O                 | rustc 1.71.1 (eb26296b5 2023-08-03)      |
 | C                      | pcc            |   52.616 | -O2                | Portable C Compiler 1.2.0.DEVEL 20200630 |
 | C                      | tcc            |   80.480 |                    | tcc version 0.9.27                       |
 | Python                 | CPython        | 5552.407 |                    | Python 3.9.2                             |
 
 Pleasantly surpised to see go can beat C++ in certain benchmarks.
 Utterly surprised that third place (without parallelizing) is Pypy!
-On the to-do list is adding a rust implementation.
+Rust has less-than-desirable performance. But I'm not a true
+*Rustacean*, so perhaps the code could be improved. Next up is Java and swift.
 
 # License
     newtonian_black_holes is free software: you can redistribute it and/or
