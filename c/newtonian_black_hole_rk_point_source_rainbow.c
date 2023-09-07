@@ -41,10 +41,10 @@ int main(void)
 
     /*  Use the template function to render the image.                        */
 #ifdef _OPENMP
-    nbh_prun(nbh_gravity, nbh_stop, nbh_color_gradient_checkerboard,
+    nbh_prun(nbh_gravity, nbh_stop, nbh_color_gradient_checker_board,
              nbh_rk_path, name);
 #else
-    nbh_run(nbh_gravity, nbh_stop, nbh_color_gradient_checkerboard,
+    nbh_run(nbh_gravity, nbh_stop, nbh_color_gradient_checker_board,
             nbh_rk_path, name);
 #endif
     return 0;

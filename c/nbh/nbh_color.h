@@ -274,8 +274,8 @@ nbh_checker_board(const struct nbh_vec6 *u)
     /*  Otherwise use a bit-wise trick to color the plane.                    */
     else if ((unsigned)(ceil(u->p.x) + ceil(u->p.y)) & 1U)
         return nbh_color_scale(&nbh_white, cfact);
-    else
-        return nbh_color_scale(&nbh_red, cfact);
+
+    return nbh_color_scale(&nbh_red, cfact);
 }
 /*  End of nbh_checker_board.                                                 */
 
@@ -305,8 +305,8 @@ nbh_bright_checker_board(const struct nbh_vec6 *u)
     /*  Otherwise use a bit-wise trick to color the plane.                    */
     else if ((unsigned)(ceil(u->p.x) + ceil(u->p.y)) & 1U)
         return nbh_color_scale(&nbh_white, cfact);
-    else
-        return nbh_color_scale(&nbh_red, cfact);
+
+    return nbh_color_scale(&nbh_red, cfact);
 }
 /*  End of nbh_bright_checker_board.                                          */
 
@@ -429,8 +429,8 @@ nbh_checker_board_highlight(const struct nbh_vec6 *u)
     /*  Otherwise use a bit-wise trick to color the plane.                    */
     else if ((unsigned)(ceil(u->p.x) + ceil(u->p.y)) & 1U)
         return nbh_color_scale(&nbh_white, cfact);
-    else
-        return nbh_color_scale(&nbh_red, cfact);
+
+    return nbh_color_scale(&nbh_red, cfact);
 }
 /*  End of nbh_checker_board_highlight.                                       */
 
@@ -508,7 +508,7 @@ nbh_angle_gradient(const struct nbh_vec6 *u)
 
 /******************************************************************************
  *  Function:                                                                 *
- *      nbh_color_gradient_checkerboard                                       *
+ *      nbh_color_gradient_checker_board                                      *
  *  Purpose:                                                                  *
  *      Creates a checker-board pattern on the detector and adds the rainbow  *
  *      gradient defined in nbh_angle_gradient.                               *
@@ -520,7 +520,7 @@ nbh_angle_gradient(const struct nbh_vec6 *u)
  *          The color given on the detector.                                  *
  ******************************************************************************/
 NBH_INLINE struct nbh_color
-nbh_color_gradient_checkerboard(const struct nbh_vec6 *u)
+nbh_color_gradient_checker_board(const struct nbh_vec6 *u)
 {
     /*  Declare necessary variables. C89 requires this at the top.            */
     struct nbh_color rainbow, checker_board;
@@ -534,7 +534,7 @@ nbh_color_gradient_checkerboard(const struct nbh_vec6 *u)
     checker_board = nbh_bright_checker_board(u);
     return nbh_color_add(&checker_board, &rainbow);
 }
-/*  End of nbh_color_gradient_checkerboard.                                   */
+/*  End of nbh_color_gradient_checker_board.                                  */
 
 #endif
 /*  End of include guard.                                                     */

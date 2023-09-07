@@ -145,8 +145,7 @@ nbh_stop(const struct nbh_vec3 *v)
         return nbh_true;
 
     /*  Otherwise, the photon is still moving. Don't stop.                    */
-    else
-        return nbh_false;
+    return nbh_false;
 }
 /*  End of nbh_stop.                                                          */
 
@@ -182,8 +181,7 @@ nbh_stop2(const struct nbh_vec3 *p)
         return nbh_true;
 
     /*  Otherwise, the photon is still moving. Don't stop.                    */
-    else
-        return nbh_false;
+    return nbh_false;
 }
 /*  End of nbh_stop2.                                                         */
 
