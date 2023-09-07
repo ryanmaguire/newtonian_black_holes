@@ -40,30 +40,30 @@ do look like what one might expect a black hole to be.
 ![Newtonian Black Hole](https://math.dartmouth.edu/~rmaguire/projects/newtonian_black_holes/newtonian_black_hole.png "Newtonian Black Hole")
 
 # Benchmarks
-| Language               | Implementation | Time (s) | Flags              | Version                                  |
-| ---------------------- | -------------- | -------- | ------------------ | ---------------------------------------- |
-| C (w/OpenMP)           | gcc            |    1.322 | -O3 -flto -fopenmp | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
-| C (w/OpenMP)           | clang          |    1.704 | -O3 -flto -fopenmp | Debian clang version 11.0.1-2            |
-| C++ (w/OpenMP)         | clang++        |    1.995 | -O3 -flto -fopenmp | Debian clang version 11.0.1-2            |
-| C++ (w/OpenMP)         | g++            |    2.234 | -O3 -flto -fopenmp | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
-| go (w/Parallelization) | golang         |    2.646 |                    | go 1.15.15                               |
-| go (w/Parallelization) | gccgo          |    2.921 | -O3 -flto          | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
-| C                      | gcc            |   15.067 | -O3 -flto          | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
-| C                      | clang          |   16.440 | -O3 -flto          | Debian clang version 11.0.1-2            |
-| Python                 | Pypy           |   18.324 |                    | PyPy 7.3.5 with GCC 10.2.1 20210110      |
-| Go                     | golang         |   23.883 |                    | go 1.15.15                               |
-| Go                     | gccgo          |   27.201 | -O3 -flto          | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
-| C++                    | g++            |   27.566 | -O3 -flto          | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
-| C++                    | clang++        |   29.547 | -O3 -flto          | Debian clang version 11.0.1-2            |
-| Rust                   | rustc          |   39.086 | -O                 | rustc 1.71.1 (eb26296b5 2023-08-03)      |
-| C                      | pcc            |   52.616 | -O2                | Portable C Compiler 1.2.0.DEVEL 20200630 |
-| C                      | tcc            |   80.480 |                    | tcc version 0.9.27                       |
-| Python                 | CPython        | 5552.407 |                    | Python 3.9.2                             |
+| Language               | Implementation | Time (s) | Flags                      | Version                                  |
+| ---------------------- | -------------- | -------- | -------------------------- | ---------------------------------------- |
+| C (w/OpenMP)           | gcc            |    1.322 | -O3 -flto -fopenmp         | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
+| C (w/OpenMP)           | clang          |    1.704 | -O3 -flto -fopenmp         | Debian clang version 11.0.1-2            |
+| C++ (w/OpenMP)         | clang++        |    1.995 | -O3 -flto -fopenmp         | Debian clang version 11.0.1-2            |
+| C++ (w/OpenMP)         | g++            |    2.234 | -O3 -flto -fopenmp         | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
+| go (w/Parallelization) | golang         |    2.646 |                            | go 1.15.15                               |
+| go (w/Parallelization) | gccgo          |    2.921 | -O3 -flto                  | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
+| C                      | gcc            |   15.067 | -O3 -flto                  | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
+| C                      | clang          |   16.440 | -O3 -flto                  | Debian clang version 11.0.1-2            |
+| Python                 | Pypy           |   18.324 |                            | PyPy 7.3.5 with GCC 10.2.1 20210110      |
+| Rust                   | rustc          |   18.348 | -C opt-level=3 -C lto=true | rustc 1.71.1 (eb26296b5 2023-08-03)      |
+| Go                     | golang         |   23.883 |                            | go 1.15.15                               |
+| Go                     | gccgo          |   27.201 | -O3 -flto                  | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
+| C++                    | g++            |   27.566 | -O3 -flto                  | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
+| C++                    | clang++        |   29.547 | -O3 -flto                  | Debian clang version 11.0.1-2            |
+| C                      | pcc            |   52.616 | -O2                        | Portable C Compiler 1.2.0.DEVEL 20200630 |
+| C                      | tcc            |   80.480 |                            | tcc version 0.9.27                       |
+| Python                 | CPython        | 5552.407 |                            | Python 3.9.2                             |
 
 Pleasantly surpised to see go can beat C++ in certain benchmarks.
 Utterly surprised that third place (without parallelizing) is Pypy!
-Rust has less-than-desirable performance. But I'm not a true
-*Rustacean*, so perhaps the code could be improved. Next up is Java and swift.
+Fixed the rust implementation and got very nice performance.
+Next up is Java and swift.
 
 # License
     newtonian_black_holes is free software: you can redistribute it and/or
