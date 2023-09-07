@@ -23,4 +23,8 @@
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/09/06                                                        *
  ******************************************************************************/
+#![crate_type = "lib"]
+#![crate_name = "nbh"]
+pub mod color;
 pub mod vec3;
+pub mod vec6;

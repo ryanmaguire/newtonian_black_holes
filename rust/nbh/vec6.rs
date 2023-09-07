@@ -18,128 +18,125 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Routines for working with vectors in R^3.                             *
+ *      Routines for working with vectors in R^6. Used for phase space.       *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
- *  Date:   2023/05/08                                                        *
+ *  Date:   2023/09/07                                                        *
  ******************************************************************************/
 
 /*  Needed for operator overloading.                                          */
 use std::ops;
 
-/*  Simple struct for vectors in R^3.                                         */
-pub struct Vec3 {
+/*  6D vectors are represented as two points in R^3. Position and velocity.   */
+#[path = "vec3.rs"]
+mod vec3;
 
-    /*  A vector is defined by it's Cartesian components.                     */
-    pub x: f64,
-    pub y: f64,
-    pub z: f64
+/*  Struct for six-dimensional vectors.                                       */
+pub struct Vec6 {
+
+    /*  The components of the vector are 3D vectors, position and velocity.   */
+    pub p: vec3::Vec3,
+    pub v: vec3::Vec3
 }
 
-/*  Copies the bits of a Vec3 to another.                                     */
-impl Copy for Vec3 {}
+/*  Copies the bits of a Vec6 to another.                                     */
+impl Copy for Vec6 {}
 
-/*  Implement Clone for Vec3. Does basically the same thing as Copy.          */
-impl Clone for Vec3 {
-    fn clone(&self) -> Vec3 {
+/*  Implement Clone for Vec6. Does basically the same thing as Copy.          */
+impl Clone for Vec6 {
+    fn clone(&self) -> Vec6 {
         return *self;
     }
 }
 
 /*  Vector addition. This is performed component-wise.                        */
-impl ops::Add<Vec3> for Vec3 {
-    type Output = Vec3;
+impl ops::Add<Vec6> for Vec6 {
+    type Output = Vec6;
 
     /*  Adder function. Add the individual components of the two vectors.     */
-    fn add(self: Vec3, rhs: Vec3) -> Vec3 {
-        return Vec3{x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z};
+    fn add(self: Vec6, rhs: Vec6) -> Vec6 {
+        return Vec6{p: self.p + rhs.p, v: self.v + rhs.v};
     }
 }
 
 /*  Vector addition. The output is stored in the left-hand side.              */
-impl ops::AddAssign<Vec3> for Vec3 {
+impl ops::AddAssign<Vec6> for Vec6 {
 
     /*  Adder function. Increment the components of self by rhs.              */
-    fn add_assign(self: &mut Vec3, rhs: Vec3) {
-        self.x += rhs.x;
-        self.y += rhs.y;
-        self.z += rhs.z;
+    fn add_assign(self: &mut Vec6, rhs: Vec6) {
+        self.p += rhs.p;
+        self.v += rhs.v;
     }
 }
 
 /*  Vector subtraction. This is performed component-wise.                     */
-impl ops::Sub<Vec3> for Vec3 {
-    type Output = Vec3;
+impl ops::Sub<Vec6> for Vec6 {
+    type Output = Vec6;
 
     /*  Subtraction function. Subtract the components of the two vectors.     */
-    fn sub(self: Vec3, rhs: Vec3) -> Vec3 {
-        return Vec3{x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z};
+    fn sub(self: Vec6, rhs: Vec6) -> Vec6 {
+        return Vec6{p: self.p - rhs.p, v: self.v - rhs.v};
     }
 }
 
 /*  Vector subtraction. The output is stored in the left-hand side.           */
-impl ops::SubAssign<Vec3> for Vec3 {
+impl ops::SubAssign<Vec6> for Vec6 {
 
     /*  Subtraction function. Deccrement the components of self by rhs.       */
-    fn sub_assign(self: &mut Vec3, rhs: Vec3) {
-        self.x -= rhs.x;
-        self.y -= rhs.y;
-        self.z -= rhs.z;
+    fn sub_assign(self: &mut Vec6, rhs: Vec6) {
+        self.p -= rhs.p;
+        self.v -= rhs.v;
     }
 }
 
 /*  Scalar multiplication.                                                    */
-impl ops::Mul<f64> for Vec3 {
-    type Output = Vec3;
+impl ops::Mul<f64> for Vec6 {
+    type Output = Vec6;
 
     /*  Scalar multiplication with the real number on the right.              */
-    fn mul(self: Vec3, rhs: f64) -> Vec3 {
-        return Vec3{x: rhs*self.x, y: rhs*self.y, z: rhs*self.z};
+    fn mul(self: Vec6, rhs: f64) -> Vec6 {
+        return Vec6{p: rhs*self.p, v: rhs*self.v};
     }
 }
 
-impl ops::Mul<Vec3> for f64 {
-    type Output = Vec3;
+impl ops::Mul<Vec6> for f64 {
+    type Output = Vec6;
 
     /*  Scalar multiplication with the real number on the left.               */
-    fn mul(self: f64, rhs: Vec3) -> Vec3 {
-        return Vec3{x: self*rhs.x, y: self*rhs.y, z: self*rhs.z};
+    fn mul(self: f64, rhs: Vec6) -> Vec6 {
+        return Vec6{p: self*rhs.p, v: self*rhs.v};
     }
 }
 
-/*  Methods for the Vec3 struct. Cross product, dot product, norm, etc.       */
-impl Vec3 {
+/*  Methods for the 6D vector struct.                                         */
+impl Vec6 {
 
-    /*  Euclidean cross-product in R^3.                                       */
-    pub fn cross(self: Vec3, rhs: Vec3) -> Vec3 {
-        let x: f64 = self.y*rhs.z - self.z*rhs.y;
-        let y: f64 = self.z*rhs.x - self.x*rhs.z;
-        let z: f64 = self.x*rhs.y - self.y*rhs.x;
-        return Vec3{x: x, y: y, z: z};
+    /*  Euclidean dot product. Add the products of the components.            */
+    pub fn dot(self: Vec6, rhs: Vec6) -> f64 {
+
+        /*  The dot product is linear over component. Use the 3D dot product. */
+        return self.p.dot(rhs.p) + self.v.dot(rhs.v);
     }
 
-    /*  Euclidean dot-product. Add the component-wise products.               */
-    pub fn dot(self: Vec3, rhs: Vec3) -> f64 {
-        return self.x*rhs.x + self.y*rhs.y + self.z*rhs.z;
+    /*  Square of the Euclidean norm.                                         */
+    pub fn norm_sq(self: Vec6) -> f64 {
+
+        /*  The square of the norm for a 6D vector is the sum of the squares  *
+         *  of the norms of the individual 3D components. Compute this.       */
+        return self.p.norm_sq() + self.v.norm_sq();
     }
 
-    /*  Euclidean norm, also the L2 norm.                                     */
-    pub fn norm(self: Vec3) -> f64 {
-        return (self.x*self.x + self.y*self.y + self.z*self.z).sqrt();
-    }
+    /*  The Euclidean norm, the length of the 6D vector.                      */
+    pub fn norm(self: Vec6) -> f64 {
 
-    /*  Square of the Euclidean norm. Avoids the square root call.            */
-    pub fn norm_sq(self: Vec3) -> f64 {
-        return self.x*self.x + self.y*self.y + self.z*self.z;
+        /*  Use the norm_sq method above and take the square root of this.    */
+        return self.norm_sq().sqrt();
     }
+}
 
-    /*  Euclidean norm of the azimuthal part.                                 */
-    pub fn rho(self: Vec3) -> f64 {
-        return (self.x*self.x + self.y*self.y).sqrt();
-    }
-
-    /*  Square of the azimuthal component.                                    */
-    pub fn rho_sq(self: Vec3) -> f64 {
-        return self.x*self.x + self.y*self.y;
-    }
+/*  Create a 6D vector from 6 real numbers.                                   */
+pub fn from_real(x: f64, y: f64, z: f64, vx: f64, vy: f64, vz: f64) -> Vec6 {
+    let p: vec3::Vec3 = vec3::Vec3{x: x, y: y, z: z};
+    let v: vec3::Vec3 = vec3::Vec3{x: vx, y: vy, z: vz};
+    return Vec6{p: p, v: v};
 }
