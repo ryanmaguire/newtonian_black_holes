@@ -29,7 +29,7 @@
 pub mod pi {
     pub const PI: f64 = 3.1415926535897932384626433832795028;
     pub const HALF_PI: f64 = 1.5707963267948966192313216916397514;
-    pub const TWHO_PI: f64 = 6.28318530717958647692528676655900559;
+    pub const TWO_PI: f64 = 6.28318530717958647692528676655900559;
 }
 
 /******************************************************************************
@@ -830,7 +830,7 @@ pub mod raytrace {
     pub fn run<P: AsRef<path::Path>>(acc: Acceleration, stop: Stopper,
                                      color: Colorer, path: Raytracer, name: P) {
         const V_START: vec3::Vec3 = vec3::Vec3{x: 0.0, y: 0.0, z: -1.0};
-        //let prog_factor: f64 = 100.0 / (setup::YSIZE as f64);
+        const PROG_FACTOR: f64 = 100.0 / (setup::YSIZE as f64);
         let mut out = ppm::PPM::create(name);
         out.init();
 
@@ -845,7 +845,9 @@ pub mod raytrace {
                 c.write(&out.file);
             }
 
-
+            if y % 20 == 0 {
+                println!("Progress: {}%", (y as f64) * PROG_FACTOR);
+            }
         }
         println!();
     }

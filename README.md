@@ -51,7 +51,7 @@ do look like what one might expect a black hole to be.
 | C                      | gcc            |   15.067 | -O3 -flto                  | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
 | C                      | clang          |   16.440 | -O3 -flto                  | Debian clang version 11.0.1-2            |
 | Python                 | Pypy           |   18.324 |                            | PyPy 7.3.5 with GCC 10.2.1 20210110      |
-| Rust                   | rustc          |   18.348 | -C opt-level=3 -C lto=true | rustc 1.71.1 (eb26296b5 2023-08-03)      |
+| Rust                   | rustc          |   21.160 | -C opt-level=3 -C lto=true | rustc 1.71.1 (eb26296b5 2023-08-03)      |
 | Go                     | golang         |   23.883 |                            | go 1.15.15                               |
 | Go                     | gccgo          |   27.201 | -O3 -flto                  | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
 | C++                    | g++            |   27.566 | -O3 -flto                  | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
@@ -62,7 +62,13 @@ do look like what one might expect a black hole to be.
 
 Pleasantly surpised to see go can beat C++ in certain benchmarks.
 Utterly surprised that third place (without parallelizing) is Pypy!
-Fixed the rust implementation and got very nice performance.
+
+A little puzzled by Rust. When running the benchmark several times to get a
+good average, the numbers vary like crazy. The first time is ~20 seconds, the
+next is nearly a minute! Not sure what's going on there. The time listed in the
+above table is the average of the "good" times. The worst was 85 seconds, but
+I'm guessing something weird was going on behind the scenes.
+
 Next up is Java and swift.
 
 # License
