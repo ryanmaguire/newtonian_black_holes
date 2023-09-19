@@ -58,15 +58,15 @@ static double nbh_setup_black_hole_radius = 1.0;
 static double nbh_setup_black_hole_radius_sq = 1.0;
 
 /*  Number of pixels in the x and y axes.                                     */
-static const unsigned int nbh_setup_xsize = 1024U;
-static const unsigned int nbh_setup_ysize = 1024U;
+static unsigned int nbh_setup_xsize = 1024U;
+static unsigned int nbh_setup_ysize = 1024U;
 
 /*  Factor used for converting from pixels to points in space. These have the *
  *  values (nbh_setup_end - nbh_setup_start) / (size - 1), where size is the  *
  *  number of pixels in the x and y axes, respectively. If you change         *
  *  nbh_setup_xsize or nbh_setup_xsize, reset these numbers too.              */
-static const double nbh_setup_pxfact = 0.019550342130987292;
-static const double nbh_setup_pyfact = 0.019550342130987292;
+static double nbh_setup_pxfact = 0.019550342130987292;
+static double nbh_setup_pyfact = 0.019550342130987292;
 
 /*  Threshold for highlighting features (usually the origin).                 */
 static const double nbh_setup_highlight_threshold = 0.02;
@@ -93,6 +93,29 @@ nbh_setup_reset_radius(double r)
     nbh_setup_black_hole_radius_sq = r*r;
 }
 /*  End of nbh_setup_reset_radius.                                            */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_setup_reset_size                                                  *
+ *  Purpose:                                                                  *
+ *      Resets the size of the output PPM.                                    *
+ *  Arguments:                                                                *
+ *      x (unsigned int):                                                     *
+ *          The number of pixels in the x direction.                          *
+ *      y (unsigned int):                                                     *
+ *          The number of pixels in the y direction.                          *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ ******************************************************************************/
+NBH_INLINE void
+nbh_setup_reset_size(unsigned int x, unsigned int y)
+{
+    nbh_setup_xsize = x;
+    nbh_setup_ysize = y;
+    nbh_setup_pxfact = (nbh_setup_end - nbh_setup_start) / (double)(x - 1U);
+    nbh_setup_pyfact = (nbh_setup_end - nbh_setup_start) / (double)(y - 1U);
+}
+/*  End of nbh_setup_reset_size.                                              */
 
 /******************************************************************************
  *  Function:                                                                 *

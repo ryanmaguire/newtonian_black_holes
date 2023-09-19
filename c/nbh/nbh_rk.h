@@ -53,6 +53,13 @@ nbh_rk_reset_max_iters(unsigned int n)
     nbh_rk_max_iters = n;
 }
 
+/*  Function for resetting the step size in the Runge-Kutta method.           */
+NBH_INLINE void
+nbh_rk_reset_time_increment(double dt)
+{
+    nbh_rk_time_increment = dt;
+}
+
 /******************************************************************************
  *  Function:                                                                 *
  *      nbh_rk4_factor                                                        *
