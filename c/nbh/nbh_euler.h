@@ -53,6 +53,13 @@ nbh_euler_reset_max_iters(unsigned int n)
     nbh_euler_max_iters = n;
 }
 
+/*  Function for resetting the step size in Euler's method.                   */
+NBH_INLINE void
+nbh_euler_reset_time_increment(double dt)
+{
+    nbh_euler_time_increment = dt;
+}
+
 /******************************************************************************
  *  Function:                                                                 *
  *      nbh_euler_path                                                        *
@@ -75,8 +82,8 @@ nbh_euler_reset_max_iters(unsigned int n)
  *      Apply Euler's method. Given initial conditions (p0, v0) and time      *
  *      increment dt, we iteratively compute:                                 *
  *                                                                            *
- *          v_{n+1} = dt*acc(p_{n+1}) + v_{n}                                 *
- *          p_{n+1} = dt*v_{n+1} + p_{n}                                      *
+ *          v_{n+1} = dt*acc(p_{n}) + v_{n}                                   *
+ *          p_{n+1} = dt*v_{n} + p_{n}                                        *
  *                                                                            *
  *      Do this until the stopper function tells you to stop, or until you've *
  *      done to many iterations.                                              *
