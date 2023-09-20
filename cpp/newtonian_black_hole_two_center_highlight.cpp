@@ -26,7 +26,7 @@
  ******************************************************************************/
 
 /*  All header files for nbh are including here.                              */
-#include "nbh.hpp"
+#include "nbh/nbh.hpp"
 
 /*  Main function for performing the raytracing.                              */
 int main(void)
