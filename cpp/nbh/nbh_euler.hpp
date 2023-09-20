@@ -34,6 +34,9 @@
 /*  Basic 6D vector struct given here.                                        */
 #include "nbh_vec6.hpp"
 
+/*  Function typedefs are provided here.                                      */
+#include "nbh_function_types.hpp"
+
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
 namespace nbh {
 
@@ -51,10 +54,11 @@ namespace nbh {
         /*  Function for resetting the max number of iterations allowed.      */
         inline void reset_max_iters(unsigned int n);
 
+        /*  Function for resetting the step size in Euler's method.           */
+        inline void reset_time_increment(double dt);
+
         /*  Function for performing Euler's method, provided below.           */
-        inline void path(nbh::vec6 &u,
-                         nbh::vec3 (*acc)(const nbh::vec3 &),
-                         bool (*stop)(const nbh::vec3 &));
+        inline void path(nbh::vec6 &u, acceleration acc, stopper stop);
     }
     /*  End of euler namespace.                                               */
 
@@ -64,13 +68,42 @@ namespace nbh {
         euler::max_iters = n;
     }
 
-    /*  Given a vector-valued acceleration a = acc(r), a starting position p, *
-     *  an initial velocity v, and a stopping condition stop, perform Euler's *
-     *  method to numerically solve the system of motion. The initial         *
-     *  conditions (p, v) are given as the 6D vector u.                       */
-    inline void euler::path(nbh::vec6 &u,
-                            nbh::vec3 (*acc)(const nbh::vec3 &),
-                            bool (*stop)(const nbh::vec3 &))
+    /*  Function for resetting the step size in Euler's method.               */
+    inline void euler::reset_time_increment(double dt)
+    {
+        euler::time_increment = dt;
+    }
+
+    /**************************************************************************
+     *  Function:                                                             *
+     *      nbh::euler::path                                                  *
+     *  Purpose:                                                              *
+     *      Given a vector-valued acceleration a = acc(r), a starting         *
+     *      position p, an initial velocity v, and a stopping condition stop, *
+     *      perform Euler's method method to numerically solve the system of  *
+     *      motion. The initial conditions (p, v) are given by u.             *
+     *  Arguments:                                                            *
+     *      u (nbh_vec6 &):                                                   *
+     *          A reference to a 6D vector that represents the initial        *
+     *          position and velocity vectors of the particle.                *
+     *      acc (acceleration):                                               *
+     *          A function that describes the equation of motion for the      *
+     *          particle.                                                     *
+     *      stop (stopper):                                                   *
+     *          A function that determines when to stop Euler's method.       *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     *  Method:                                                               *
+     *      Apply Euler's method. Given initial conditions (p0, v0) and time  *
+     *      increment dt, we iteratively compute:                             *
+     *                                                                        *
+     *          v_{n+1} = dt*acc(p_{n}) + v_{n}                               *
+     *          p_{n+1} = dt*v_{n} + p_{n}                                    *
+     *                                                                        *
+     *      Do this until the stopper function tells you to stop, or until    *
+     *      you've performed to many iterations.                              *
+     **************************************************************************/
+    inline void euler::path(nbh::vec6 &u, acceleration acc, stopper stop)
     {
         /*  Use of this function with nbh makes a very naive assumption.      *
          *  Newton's Second Law states that F = ma, where a is the            *
@@ -112,8 +145,9 @@ namespace nbh {
              *  we use this v to compute p via dp/dt = v, again solving       *
              *  numerically with Euler's method. So long as dt is small,      *
              *  the error should be small as well.                            */
+            const nbh::vec3 a = acc(u.p);
             u.p += u.v * euler::time_increment;
-            u.v += acc(u.p) * euler::time_increment;
+            u.v += a * euler::time_increment;
 
             /*  It is possible that a photon was captured into orbit, but not *
              *  absorbed into the black hole. To avoid an infinite loop,      *
