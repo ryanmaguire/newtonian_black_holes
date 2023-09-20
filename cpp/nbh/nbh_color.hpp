@@ -37,6 +37,9 @@
 /*  Struct for working with PPM files found here.                             */
 #include "nbh_ppm.hpp"
 
+/*  Multiples of pi provides here.                                            */
+#include "nbh_pi.hpp"
+
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
 namespace nbh {
 
@@ -131,9 +134,6 @@ namespace nbh {
          *  Outputs:                                                          *
          *      mix (nbh::color).                                             *
          *          The average of the color c and *this*.                    *
-         *  Method:                                                           *
-         *      Cast each channel to double to avoid overflow. Then average   *
-         *      the values together and cast back to unsigned char.           *
          **********************************************************************/
         inline color operator + (const nbh::color &c) const;
 
@@ -147,8 +147,6 @@ namespace nbh {
          *          A color.                                                  *
          *  Outputs:                                                          *
          *      None (void).                                                  *
-         *  Method:                                                           *
-         *      Average over each channel and store the result in *this*.     *
          **********************************************************************/
         inline void operator += (const nbh::color &c);
     };
@@ -159,7 +157,22 @@ namespace nbh {
         return;
     }
 
-    /*  Constructor from three chars. Set the values for each color.          */
+    /**************************************************************************
+     *  Constructor:                                                          *
+     *      nbh::color                                                        *
+     *  Purpose:                                                              *
+     *      Creates a color struct from three unsigned values.                *
+     *  Arguments:                                                            *
+     *      r (unsigned char):                                                *
+     *          The red component of the color.                               *
+     *      g (unsigned char):                                                *
+     *          The green component of the color.                             *
+     *      b (unsigned char):                                                *
+     *          The blue component of the color.                              *
+     *  Outputs:                                                              *
+     *      c (nbh::color):                                                   *
+     *          The color (r, g, b) in 24-bit RGB color space.                *
+     **************************************************************************/
     color::color(unsigned char r, unsigned char g, unsigned char b)
     {
         red = r;
@@ -167,7 +180,17 @@ namespace nbh {
         blue = b;
     }
 
-    /*  Function for writing a color to a PPM file.                           */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      nbh::write                                                        *
+     *  Purpose:                                                              *
+     *      Writes a color to a FILE.                                         *
+     *  Arguments:                                                            *
+     *      fp (FILE *):                                                      *
+     *          A pointer to a file, the file the color is written to.        *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     **************************************************************************/
     inline void color::write(FILE *fp) const
     {
         std::fputc(int(red), fp);
@@ -175,13 +198,39 @@ namespace nbh {
         std::fputc(int(blue), fp);
     }
 
-    /*  Function for writing directly to a PPM struct.                        */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      nbh::write                                                        *
+     *  Purpose:                                                              *
+     *      Writes a color to a PPM file.                                     *
+     *  Arguments:                                                            *
+     *      PPM (nbh::ppm &):                                                 *
+     *          A reference to a PPM file that has been initialized.          *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     **************************************************************************/
     inline void color::write(nbh::ppm &PPM) const
     {
         write(PPM.fp);
     }
 
-    /*  Scale a color by a positive real number. Used for darkening.          */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      *                                                                 *
+     *  Purpose:                                                              *
+     *      Scales the intensity of a color by a real number.                 *
+     *  Arguments:                                                            *
+     *      t (double):                                                       *
+     *          A real number, usually between 0 an 1.                        *
+     *  Outputs:                                                              *
+     *      tc (nbh::color).                                                  *
+     *          The color *this* with each color channel scaled by t.         *
+     *  Method:                                                               *
+     *      Scale each color channel by t and then cast to unsigned char.     *
+     *  Notes:                                                                *
+     *      No checks for overflow are performed. Large or negative values of *
+     *      t may yield unexpected results.                                   *
+     **************************************************************************/
     inline color color::operator * (double t) const
     {
         const unsigned char r = static_cast<unsigned char>(t*red);
@@ -190,7 +239,23 @@ namespace nbh {
         return color(r, g, b);
     }
 
-    /*  Scale a color by a positive real number. Used for darkening.          */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      *=                                                                *
+     *  Purpose:                                                              *
+     *      Scales the intensity of a color by a real number.                 *
+     *  Arguments:                                                            *
+     *      t (double):                                                       *
+     *          A real number, usually between 0 an 1.                        *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     *  Method:                                                               *
+     *      Scale each color channel by t and then cast to unsigned char. The *
+     *      end result is then stored in *this*.                              *
+     *  Notes:                                                                *
+     *      No checks for overflow are performed. Large or negative values of *
+     *      t may yield unexpected results.                                   *
+     **************************************************************************/
     inline void color::operator *= (double t)
     {
         red = static_cast<unsigned char>(t*red);
@@ -198,18 +263,27 @@ namespace nbh {
         blue = static_cast<unsigned char>(t*blue);
     }
 
-    /*  Operator for adding colors. We take the average of the components.    */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      +                                                                 *
+     *  Purpose:                                                              *
+     *      Mixes two colors together by averaging over their components.     *
+     *  Arguments:                                                            *
+     *      c (const nbh::color &c):                                          *
+     *          A color.                                                      *
+     *  Outputs:                                                              *
+     *      mix (nbh::color).                                                 *
+     *          The average of the color c and *this*.                        *
+     *  Method:                                                               *
+     *      Cast each channel to double to avoid overflow. Then average       *
+     *      the values together and cast back to unsigned char.               *
+     **************************************************************************/
     inline color color::operator + (const nbh::color &c) const
     {
         /*  Cast the values to doubles and take the average, component-wise.  */
-        const double x =
-            0.5 * (static_cast<double>(red) + (static_cast<double>(c.red)));
-
-        const double y =
-            0.5 * (static_cast<double>(green) + static_cast<double>(c.green));
-
-        const double z =
-            0.5 * (static_cast<double>(blue)  + static_cast<double>(c.blue));
+        const double x = 0.5 * (double(red) + double(c.red));
+        const double y = 0.5 * (double(green) + double(c.green));
+        const double z = 0.5 * (double(blue) + double(c.blue));
 
         /*  Cast the double back to unsigned char's and return.               */
         const unsigned char r = static_cast<unsigned char>(x);
@@ -218,18 +292,25 @@ namespace nbh {
         return color(r, g, b);
     }
 
-    /*  Operator for adding colors. We take the average of the components.    */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      +=                                                                *
+     *  Purpose:                                                              *
+     *      Mixes two colors together by averaging over their components.     *
+     *  Arguments:                                                            *
+     *      c (const nbh::color &c):                                          *
+     *          A color.                                                      *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     *  Method:                                                               *
+     *      Average over each channel and store the result in *this*.         *
+     **************************************************************************/
     inline void color::operator += (const nbh::color &c)
     {
         /*  Cast the values to doubles and take the average, component-wise.  */
-        const double x =
-            0.5 * (static_cast<double>(red) + (static_cast<double>(c.red)));
-
-        const double y =
-            0.5 * (static_cast<double>(green) + static_cast<double>(c.green));
-
-        const double z =
-            0.5 * (static_cast<double>(blue)  + static_cast<double>(c.blue));
+        const double x = 0.5 * (double(red) + double(c.red));
+        const double y = 0.5 * (double(green) + double(c.green));
+        const double z = 0.5 * (double(blue) + double(c.blue));
 
         /*  Cast the double back to unsigned char's and return.               */
         red = static_cast<unsigned char>(x);
@@ -271,11 +352,22 @@ namespace nbh {
     }
     /*  End of namespace "colors".                                            */
 
-    /*  Function for creating a checker board pattern on the detector.        */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      nbh::checker_board                                                *
+     *  Purpose:                                                              *
+     *      Creates a checker-board pattern on the detector.                  *
+     *  Arguments:                                                            *
+     *      u (const nbh::vec6 &):                                            *
+     *          The position and velocity of the particle.                    *
+     *  Outputs:                                                              *
+     *      c (nbh::color):                                                   *
+     *          The color given on the detector.                              *
+     **************************************************************************/
     inline color checker_board(const nbh::vec6 &u)
     {
         /*  Factor for darkening the checker board.                           */
-        const double cfact = nbh::setup::z_detector_sq/u.p.normsq();
+        const double cfact = nbh::setup::z_detector_sq / u.p.normsq();
 
         /*  If the photon didn't make it, color the pixel black.              */
         if (u.p.z > nbh::setup::z_detector)
@@ -284,11 +376,22 @@ namespace nbh {
         /*  Otherwise use a bit-wise trick to color the plane.                */
         else if (static_cast<unsigned>(std::ceil(u.p.x)+std::ceil(u.p.y)) & 1U)
             return colors::white() * cfact;
-        else
-            return colors::red() * cfact;
+
+        return colors::red() * cfact;
     }
 
-    /*  Brighter version of the previous checker board.                       */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      nbh::bright_checker_board                                         *
+     *  Purpose:                                                              *
+     *      Creates a brighter checker-board pattern on the detector.         *
+     *  Arguments:                                                            *
+     *      u (const nbh::vec6 &):                                            *
+     *          The position and velocity of the particle.                    *
+     *  Outputs:                                                              *
+     *      c (nbh::color):                                                   *
+     *          The color given on the detector.                              *
+     **************************************************************************/
     inline color bright_checker_board(const nbh::vec6 &u)
     {
         /*  Factor for darkening the checker board.                           */
@@ -301,15 +404,26 @@ namespace nbh {
         /*  Otherwise use a bit-wise trick to color the plane.                */
         else if (static_cast<unsigned>(std::ceil(u.p.x)+std::ceil(u.p.y)) & 1U)
             return colors::white() * cfact;
-        else
-            return colors::red() * cfact;
+
+        return colors::red() * cfact;
     }
 
-    /*  Function for creating a checker board pattern on the detector.        */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      nbh::checker_board_four                                           *
+     *  Purpose:                                                              *
+     *      Creates a checker-board pattern on the detector with four colors. *
+     *  Arguments:                                                            *
+     *      u (const nbh::vec6 &):                                            *
+     *          The position and velocity of the particle.                    *
+     *  Outputs:                                                              *
+     *      c (nbh::color):                                                   *
+     *          The color given on the detector.                              *
+     **************************************************************************/
     inline color checker_board_four(const nbh::vec6 &u)
     {
         /*  Factor for darkening the checker board.                           */
-        const double cfact = nbh::setup::z_detector_sq/u.p.normsq();
+        const double cfact = nbh::setup::z_detector_sq / u.p.normsq();
 
         /*  Integers that determines the color.                               */
         const unsigned int nx = static_cast<unsigned>(std::ceil(u.p.x)) & 1U;
@@ -334,11 +448,23 @@ namespace nbh {
         }
     }
 
-    /*  Function for creating a checker board pattern on the detector.        */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      nbh::checker_board_four_highlight                                 *
+     *  Purpose:                                                              *
+     *      Creates a checker-board pattern using four colors and             *
+     *      highlights the origin blue.                                       *
+     *  Arguments:                                                            *
+     *      u (const nbh::vec6 &):                                            *
+     *          The position and velocity of the particle.                    *
+     *  Outputs:                                                              *
+     *      c (nbh::color):                                                   *
+     *          The color given on the detector.                              *
+     **************************************************************************/
     inline color checker_board_four_highlight(const nbh::vec6 &u)
     {
         /*  Factor for darkening the checker board.                           */
-        const double cfact = nbh::setup::z_detector_sq/u.p.normsq();
+        const double cfact = nbh::setup::z_detector_sq / u.p.normsq();
 
         /*  Integers that determines the color.                               */
         const unsigned int nx = static_cast<unsigned>(std::ceil(u.p.x)) & 1U;
@@ -349,7 +475,7 @@ namespace nbh {
         if (u.p.z > nbh::setup::z_detector)
             return nbh::colors::black();
 
-        /*  If the center of the plane was hit, color blue.               */
+        /*  If the center of the plane was hit, color blue.                   */
         else if (u.p.rhosq() < nbh::setup::highlight_threshold)
             return nbh::colors::blue();
 
@@ -367,25 +493,52 @@ namespace nbh {
         }
     }
 
-    /*  Function for creating a checker board pattern on the detector.        */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      nbh::checker_board_highlight                                      *
+     *  Purpose:                                                              *
+     *      Creates a checker-board pattern and highlights the origin blue.   *
+     *  Arguments:                                                            *
+     *      u (const nbh::vec6 &):                                            *
+     *          The position and velocity of the particle.                    *
+     *  Outputs:                                                              *
+     *      c (nbh::color):                                                   *
+     *          The color given on the detector.                              *
+     **************************************************************************/
     inline color checker_board_highlight(const nbh::vec6 &u)
     {
+        /*  Factor for darkening the checker board.                           */
         const double color_factor = nbh::setup::z_detector_sq / u.p.normsq();
+
+        /*  If the photon didn't make it, color the pixel black.              */
         if (u.p.z > nbh::setup::z_detector)
             return nbh::colors::black();
 
-        /*  If the center of the plane was hit, color blue.               */
+        /*  If the center of the plane was hit, color blue.                   */
         else if (u.p.rhosq() < nbh::setup::highlight_threshold)
             return nbh::colors::blue();
 
+        /*  Otherwise use a bit-wise trick to color the plane.                */
         else if (static_cast<unsigned>(std::ceil(u.p.x)+std::ceil(u.p.y)) & 1U)
             return colors::white() * color_factor;
-        else
-            return colors::red() * color_factor;
+
+        return colors::red() * color_factor;
     }
 
-    /*  Function for creating a rainbow-gradient based on the angle the       *
-     *  velocity vector makes with the detector.                              */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      nbh::angle_gradient                                               *
+     *  Purpose:                                                              *
+     *      Creates a rainbow gradient of color based on the angle the        *
+     *      velocity vector of the particle makes with the detector on impact.*
+     *  Arguments:                                                            *
+     *      u (const nbh::vec6 &):                                            *
+     *          The position and velocity of the particle as it hit           *
+     *          the detector.                                                 *
+     *  Outputs:                                                              *
+     *      c (nbh::color):                                                   *
+     *          The color given on the detector.                              *
+     **************************************************************************/
     inline color angle_gradient(const nbh::vec6 &u)
     {
         /*  Declare unsigned char's for computing the output color.           */
@@ -396,7 +549,7 @@ namespace nbh {
         const double angle = std::atan2(std::fabs(u.v.z), u.v.rho());
 
         /*  Scale the angle so that it falls between 0 and 255.               */
-        const double scaled = 255.0 * angle / M_PI_2;
+        const double scaled = 255.0 * angle / NBH_HALF_PI;
 
         /*  Use an RGB rainbow gradient to color the current pixel. We'll set *
          *  blue to correspond to the least value and red for the greatest,   *
@@ -443,8 +596,20 @@ namespace nbh {
         return color(red, green, blue);
     }
 
-    /*  Function for creating a rainbow-gradient based on the angle the       *
-     *  velocity vector makes with the detector with a checkerboard pattern.  */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      nbh::color_gradient_checkerboard                                  *
+     *  Purpose:                                                              *
+     *      Creates a checker-board pattern on the detector and adds the      *
+     *      rainbow gradient defined in nbh_angle_gradient.                   *
+     *  Arguments:                                                            *
+     *      u (const nbh::vec6 &):                                            *
+     *          The position and velocity of the particle as it               *
+     *          hit the detector.                                             *
+     *  Outputs:                                                              *
+     *      c (nbh::color):                                                   *
+     *          The color given on the detector.                              *
+     **************************************************************************/
     inline color color_gradient_checkerboard(const nbh::vec6 &u)
     {
         /*  If the photon didn't make it, color the pixel black.              */
