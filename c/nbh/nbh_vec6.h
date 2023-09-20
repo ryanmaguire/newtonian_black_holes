@@ -288,12 +288,12 @@ nbh_vec6_scale(double a, const struct nbh_vec6 *u)
  *  Arguments:                                                                *
  *      a (double):                                                           *
  *          A real number.                                                    *
- *      v (struct nbh_vec6 *):                                                *
+ *      u (struct nbh_vec6 *):                                                *
  *          A pointer to a vector. The product is stored here.                *
  *  Outputs:                                                                  *
  *      None (void).                                                          *
  *  Method:                                                                   *
- *      Perform scalar multiplication component-wise, storing the result in v.*
+ *      Perform scalar multiplication component-wise, storing the result in u.*
  ******************************************************************************/
 NBH_INLINE void
 nbh_vec6_scaleby(double a, struct nbh_vec6 *u)
