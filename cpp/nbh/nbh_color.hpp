@@ -49,25 +49,107 @@ namespace nbh {
         /*  Empty constructor.                                                */
         color(void);
 
-        /*  Constructor from three color values, RGB.                         */
+        /**********************************************************************
+         *  Constructor:                                                      *
+         *      nbh::color                                                    *
+         *  Purpose:                                                          *
+         *      Creates a color struct from three unsigned values.            *
+         *  Arguments:                                                        *
+         *      r (unsigned char):                                            *
+         *          The red component of the color.                           *
+         *      g (unsigned char):                                            *
+         *          The green component of the color.                         *
+         *      b (unsigned char):                                            *
+         *          The blue component of the color.                          *
+         *  Outputs:                                                          *
+         *      c (nbh::color):                                               *
+         *          The color (r, g, b) in 24-bit RGB color space.            *
+         **********************************************************************/
         color(unsigned char r, unsigned char g, unsigned char b);
 
-        /*  Write function, writes the color to a PPM file.                   */
+        /**********************************************************************
+         *  Method:                                                           *
+         *      nbh::write                                                    *
+         *  Purpose:                                                          *
+         *      Writes a color to a FILE.                                     *
+         *  Arguments:                                                        *
+         *      fp (FILE *):                                                  *
+         *          A pointer to a file, the file the color is written to.    *
+         *  Outputs:                                                          *
+         *      None (void).                                                  *
+         **********************************************************************/
         inline void write(FILE *fp) const;
 
-        /*  Write function, writes directly to a PPM struct.                  */
+        /**********************************************************************
+         *  Method:                                                           *
+         *      nbh::write                                                    *
+         *  Purpose:                                                          *
+         *      Writes a color to a PPM file.                                 *
+         *  Arguments:                                                        *
+         *      PPM (nbh::ppm &):                                             *
+         *          A reference to a PPM file that has been initialized.      *
+         *  Outputs:                                                          *
+         *      None (void).                                                  *
+         **********************************************************************/
         inline void write(nbh::ppm &PPM) const;
 
-        /*  Scale a color by a positive real number. Used for darkening.      */
+        /**********************************************************************
+         *  Operator:                                                         *
+         *      *                                                             *
+         *  Purpose:                                                          *
+         *      Scales the intensity of a color by a real number.             *
+         *  Arguments:                                                        *
+         *      t (double):                                                   *
+         *          A real number, usually between 0 an 1.                    *
+         *  Outputs:                                                          *
+         *      tc (nbh::color).                                              *
+         *          The color *this* with each color channel scaled by t.     *
+         **********************************************************************/
         inline color operator * (double t) const;
 
-        /*  Scale a color by a positive real number.                          */
+        /**********************************************************************
+         *  Operator:                                                         *
+         *      *=                                                            *
+         *  Purpose:                                                          *
+         *      Scales the intensity of a color by a real number.             *
+         *  Arguments:                                                        *
+         *      t (double):                                                   *
+         *          A real number, usually between 0 an 1.                    *
+         *  Outputs:                                                          *
+         *      None (void).                                                  *
+         **********************************************************************/
         inline void operator *= (double t);
 
-        /*  Operator for adding colors. We average the components.            */
+        /**********************************************************************
+         *  Operator:                                                         *
+         *      +                                                             *
+         *  Purpose:                                                          *
+         *      Mixes two colors together by averaging over their components. *
+         *  Arguments:                                                        *
+         *      c (const nbh::color &c):                                      *
+         *          A color.                                                  *
+         *  Outputs:                                                          *
+         *      mix (nbh::color).                                             *
+         *          The average of the color c and *this*.                    *
+         *  Method:                                                           *
+         *      Cast each channel to double to avoid overflow. Then average   *
+         *      the values together and cast back to unsigned char.           *
+         **********************************************************************/
         inline color operator + (const nbh::color &c) const;
 
-        /*  Operator for adding colors.                                       */
+        /**********************************************************************
+         *  Operator:                                                         *
+         *      +=                                                            *
+         *  Purpose:                                                          *
+         *      Mixes two colors together by averaging over their components. *
+         *  Arguments:                                                        *
+         *      c (const nbh::color &c):                                      *
+         *          A color.                                                  *
+         *  Outputs:                                                          *
+         *      None (void).                                                  *
+         *  Method:                                                           *
+         *      Average over each channel and store the result in *this*.     *
+         **********************************************************************/
         inline void operator += (const nbh::color &c);
     };
 
