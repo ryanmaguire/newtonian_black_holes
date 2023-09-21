@@ -42,43 +42,45 @@ do look like what one might expect a black hole to be.
 # Benchmarks
 The following used a Ryzen 9 3900x (12-core) on Debian 11.
 
-| Language               | Implementation | Time (s) | Flags                      | Version                                  |
-| ---------------------- | -------------- | -------- | -------------------------- | ---------------------------------------- |
-| C (w/OpenMP)           | gcc            |    1.322 | -O3 -flto -fopenmp         | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
-| C (w/OpenMP)           | clang          |    1.704 | -O3 -flto -fopenmp         | Debian clang version 11.0.1-2            |
-| C++ (w/OpenMP)         | clang++        |    1.995 | -O3 -flto -fopenmp         | Debian clang version 11.0.1-2            |
-| C++ (w/OpenMP)         | g++            |    2.234 | -O3 -flto -fopenmp         | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
-| go (w/Parallelization) | golang         |    2.646 |                            | go 1.15.15                               |
-| go (w/Parallelization) | gccgo          |    2.921 | -O3 -flto                  | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
-| C                      | gcc            |   15.067 | -O3 -flto                  | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
-| C                      | clang          |   16.440 | -O3 -flto                  | Debian clang version 11.0.1-2            |
-| Fortran                | gfortran       |   17.431 | -O3 -flto                  | GNU Fortran (Debian 10.2.1-6) 20210110   |
-| Python                 | Pypy           |   18.324 |                            | PyPy 7.3.5 with GCC 10.2.1 20210110      |
-| Rust                   | rustc          |   21.160 | -C opt-level=3 -C lto=true | rustc 1.71.1 (eb26296b5 2023-08-03)      |
-| Go                     | golang         |   23.883 |                            | go 1.15.15                               |
-| Go                     | gccgo          |   27.201 | -O3 -flto                  | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
-| C++                    | g++            |   27.566 | -O3 -flto                  | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
-| C++                    | clang++        |   29.547 | -O3 -flto                  | Debian clang version 11.0.1-2            |
-| C                      | pcc            |   52.616 | -O2                        | Portable C Compiler 1.2.0.DEVEL 20200630 |
-| C                      | tcc            |   80.480 |                            | tcc version 0.9.27                       |
-| Python                 | CPython        | 5552.407 |                            | Python 3.9.2                             |
+| Language               | Implementation | Time (s) | Version                                  |
+| ---------------------- | -------------- | -------- | ---------------------------------------- |
+| C (w/OpenMP)           | gcc            |    1.322 | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
+| C (w/OpenMP)           | clang          |    1.704 | Debian clang version 11.0.1-2            |
+| C++ (w/OpenMP)         | clang++        |    1.995 | Debian clang version 11.0.1-2            |
+| C++ (w/OpenMP)         | g++            |    2.234 | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
+| go (w/Parallelization) | golang         |    2.646 | go 1.15.15                               |
+| go (w/Parallelization) | gccgo          |    2.921 | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
+| C                      | gcc            |   15.067 | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
+| C                      | clang          |   16.440 | Debian clang version 11.0.1-2            |
+| Fortran                | gfortran       |   17.431 | GNU Fortran (Debian 10.2.1-6) 20210110   |
+| Python                 | Pypy           |   18.324 | PyPy 7.3.5 with GCC 10.2.1 20210110      |
+| Rust                   | rustc          |   21.160 | rustc 1.71.1 (eb26296b5 2023-08-03)      |
+| Go                     | golang         |   23.883 | go 1.15.15                               |
+| Swift                  | swiftc         |   27.061 | Swift version 5.8.1 (swift-5.8.1-RELEASE)|
+| Go                     | gccgo          |   27.201 | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
+| C++                    | g++            |   27.566 | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
+| C++                    | clang++        |   29.547 | Debian clang version 11.0.1-2            |
+| C                      | pcc            |   52.616 | Portable C Compiler 1.2.0.DEVEL 20200630 |
+| C                      | tcc            |   80.480 | tcc version 0.9.27                       |
+| Python                 | CPython        | 5552.407 | Python 3.9.2                             |
+| IDL                    | GDL            | 9554.826 | GNU Data Language, Version 0.9.9         |
 
 These newer benchmarks used a Ryzen 9 7950x on Debian 12.
 
-| Language               | Implementation | Time (s) | Flags                      | Version                                  |
-| ---------------------- | -------------- | -------- | -------------------------- | ---------------------------------------- |
-| C                      | gcc            |   11.396 | -O3 -flto                  | gcc (Debian 12.2.0-14) 12.2.0            |
-| C++                    | g++            |   11.840 | -O3 -flto                  | g++ (Debian 12.2.0-14) 12.2.0            |
-| C                      | clang          |   12.199 | -O3 -flto                  | Debian clang version 14.0.6              |
-| C++                    | clang++        |   12.361 | -O3 -flto                  | Debian clang version 14.0.6              |
-| Fortran                | gfortran       |   12.633 | -O3 -flto                  | GNU Fortran (Debian 12.2.0-14) 12.2.0    |
-| Rust                   | rustc          |   12.681 | -C opt-level=3 -C lto=true | rustc 1.72.0 (5680fa18f 2023-08-23)      |
-| Python                 | Pypy           |   15.481 |                            | PyPy 7.3.11 with GCC 12.2.0              |
-| Go                     | golang         |   18.118 |                            | go 1.19.8                                |
-| Go                     | gccgo          |   18.932 | -O3 -flto                  | gccgo (Debian 12.2.0-14) 12.2.0          |
-| C                      | pcc            |   62.625 | -O2                        | Portable C Compiler 1.2.0.DEVEL 20220331 |
-| C                      | tcc            |   70.031 |                            | tcc version 0.9.27                       |
-| Python                 | CPython        | 1876.293 |                            | Python 3.11.2                            |
+| Language               | Implementation | Time (s) | Version                                  |
+| ---------------------- | -------------- | -------- | ---------------------------------------- |
+| C                      | gcc            |   11.396 | gcc (Debian 12.2.0-14) 12.2.0            |
+| C++                    | g++            |   11.840 | g++ (Debian 12.2.0-14) 12.2.0            |
+| C                      | clang          |   12.199 | Debian clang version 14.0.6              |
+| C++                    | clang++        |   12.361 | Debian clang version 14.0.6              |
+| Fortran                | gfortran       |   12.633 | GNU Fortran (Debian 12.2.0-14) 12.2.0    |
+| Rust                   | rustc          |   12.681 | rustc 1.72.0 (5680fa18f 2023-08-23)      |
+| Python                 | Pypy           |   15.481 | PyPy 7.3.11 with GCC 12.2.0              |
+| Go                     | golang         |   18.118 | go 1.19.8                                |
+| Go                     | gccgo          |   18.932 | gccgo (Debian 12.2.0-14) 12.2.0          |
+| C                      | pcc            |   62.625 | Portable C Compiler 1.2.0.DEVEL 20220331 |
+| C                      | tcc            |   70.031 | tcc version 0.9.27                       |
+| Python                 | CPython        | 1876.293 | Python 3.11.2                            |
 
 # License
     newtonian_black_holes is free software: you can redistribute it and/or
