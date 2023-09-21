@@ -18,17 +18,31 @@
 ;   <https://www.gnu.org/licenses/>.                                           ;
 ;------------------------------------------------------------------------------;
 ;   Purpose:                                                                   ;
-;       Scales a color by a real number.                                       ;
+;       Creates a checker-board pattern on the detector.                       ;
 ;------------------------------------------------------------------------------;
 ;   Author: Ryan Maguire                                                       ;
 ;   Date:   2023/09/21                                                         ;
 ;------------------------------------------------------------------------------;
-FUNCTION SCALE_COLOR, SCALE_FACTOR, C
+FUNCTION CHECKER_BOARD, P
     ON_ERROR, 2
+    BLACK = [0, 0, 0]
+    WHITE = [255, 255, 255]
+    RED = [255, 0, 0]
+    Z_DETECTOR = 10.0D
+    Z_DETECTOR_SQUARED = 100.0D
+    COLOR_FACTOR = Z_DETECTOR_SQUARED / NORM_SQUARED(P)
 
-    RED   = UINT(SCALE_FACTOR * C[0])
-    GREEN = UINT(SCALE_FACTOR * C[1])
-    BLUE  = UINT(SCALE_FACTOR * C[2])
-    RETURN, [RED, GREEN, BLUE]
+    IF P[2] LT Z_DETECTOR THEN BEGIN
+        RETURN, BLACK
+    ENDIF ELSE BEGIN
+        CX = LONG(CEIL(P[0]))
+        CY = LONG(CEIL(P[1]))
+        USE_WHITE = (CX + CY) AND 1
+
+        IF USE_WHITE EQ 0 THEN BEGIN
+            RETURN, SCALE_COLOR(COLOR_FACTOR, RED)
+        ENDIF ELSE BEGIN
+            RETURN, SCALE_COLOR(COLOR_FACTOR, WHITE)
+        ENDELSE
+    ENDELSE
 END
-

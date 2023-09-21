@@ -23,7 +23,7 @@
 ;   Author: Ryan Maguire                                                       ;
 ;   Date:   2023/09/21                                                         ;
 ;------------------------------------------------------------------------------;
-PRO EULER, P, V, ACCELERATION, HALT
+PRO EULER, P, V
     ON_ERROR, 2
     EULER_MAX_ITERS = 65535
     EULER_TIME_INCREMENT = 0.01
@@ -33,7 +33,7 @@ PRO EULER, P, V, ACCELERATION, HALT
         IF HALT(P) THEN RETURN
 
         ; Compute the acceleration due to gravity at the current point.
-        A = ACCELERATION(P)
+        A = GRAVITY(P)
 
         ; Update the position and velocity using Euler's method.
         P = V*EULER_TIME_INCREMENT + P

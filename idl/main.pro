@@ -18,17 +18,55 @@
 ;   <https://www.gnu.org/licenses/>.                                           ;
 ;------------------------------------------------------------------------------;
 ;   Purpose:                                                                   ;
-;       Scales a color by a real number.                                       ;
+;       Provides raytracing routines to render black holes.                    ;
 ;------------------------------------------------------------------------------;
 ;   Author: Ryan Maguire                                                       ;
-;   Date:   2023/09/21                                                         ;
+;   Date:   2023/09/20                                                         ;
 ;------------------------------------------------------------------------------;
-FUNCTION SCALE_COLOR, SCALE_FACTOR, C
-    ON_ERROR, 2
+PRO MAIN
+    XSIZE = 1024
+    YSIZE = 1024
+    INITIAL_VELOCITY = [0.0D, 0.0D, 1.0D]
 
-    RED   = UINT(SCALE_FACTOR * C[0])
-    GREEN = UINT(SCALE_FACTOR * C[1])
-    BLUE  = UINT(SCALE_FACTOR * C[2])
-    RETURN, [RED, GREEN, BLUE]
+    ; Factor for printing a status update.
+    PROG_FACTOR = 100.0D / DOUBLE(YSIZE)
+
+    ; Open a file for the output PPM.
+    OPENW, 1, "newtonian_black_holes.ppm"
+
+    ; Using text mode to make life easier.
+    PRINTF, 1, 'P3'
+    PRINTF, 1, '1024 1024'
+    PRINTF, 1, '255'
+
+    ; Loop over the Y coordinates of the pixels.
+    FOR Y = 1, YSIZE DO BEGIN
+
+        ; And loop over the X coordinates of the pixels.
+        FOR X = 1, XSIZE DO BEGIN
+
+            ; Get the point in space corresponding to this pixel.
+            P = PIXEL_TO_POINT(X, Y)
+
+            ; The initial velocity is constant across the detector.
+            V = INITIAL_VELOCITY
+
+            ; Raytrace where the light came from.
+            EULER, P, V
+
+            ; Get the color corresponding to the point.
+            C = CHECKER_BOARD(P)
+
+            ; Add this color to the PPM in plain-text format.
+            PRINTF, 1, C, FORMAT = "(I3,I4,I4)"
+        ENDFOR
+
+        ; Print a status update.
+        IF (Y MOD 20) EQ 0 THEN BEGIN
+            PRINT, "Progress: ", DOUBLE(Y) * PROG_FACTOR, "%"
+        ENDIF
+    ENDFOR
+
+    ; Close the file and exit the program.
+    CLOSE, 1
 END
-
