@@ -54,9 +54,9 @@ The following used a Ryzen 9 3900x (12-core) on Debian 11.
 | C                      | clang          |   16.440 | Debian clang version 11.0.1-2            |
 | Fortran                | gfortran       |   17.431 | GNU Fortran (Debian 10.2.1-6) 20210110   |
 | Python                 | Pypy           |   18.324 | PyPy 7.3.5 with GCC 10.2.1 20210110      |
+| Swift                  | swiftc         |   19.004 | Swift version 5.8.1 (swift-5.8.1-RELEASE)|
 | Rust                   | rustc          |   21.160 | rustc 1.71.1 (eb26296b5 2023-08-03)      |
 | Go                     | golang         |   23.883 | go 1.15.15                               |
-| Swift                  | swiftc         |   27.061 | Swift version 5.8.1 (swift-5.8.1-RELEASE)|
 | Go                     | gccgo          |   27.201 | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
 | C++                    | g++            |   27.566 | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
 | C++                    | clang++        |   29.547 | Debian clang version 11.0.1-2            |
