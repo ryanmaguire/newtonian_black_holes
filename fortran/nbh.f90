@@ -67,7 +67,7 @@ PROGRAM MAIN
 
         ! Print a status update every now-and-again.
         IF (MOD(Y, 20) .EQ. 0) THEN
-            PRINT "(a,F5.2,a)", "Progress: ", REAL(Y) * PROG_FACTOR, "%"
+            PRINT "(A,F5.2,A)", "Progress: ", REAL(Y) * PROG_FACTOR, "%"
         END IF
     END DO
 
