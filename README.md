@@ -40,6 +40,8 @@ do look like what one might expect a black hole to be.
 ![Newtonian Black Hole](https://math.dartmouth.edu/~rmaguire/projects/newtonian_black_holes/newtonian_black_hole.png "Newtonian Black Hole")
 
 # Benchmarks
+The following used a Ryzen 9 3900x (12-core) on Debian 11.
+
 | Language               | Implementation | Time (s) | Flags                      | Version                                  |
 | ---------------------- | -------------- | -------- | -------------------------- | ---------------------------------------- |
 | C (w/OpenMP)           | gcc            |    1.322 | -O3 -flto -fopenmp         | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
@@ -61,16 +63,22 @@ do look like what one might expect a black hole to be.
 | C                      | tcc            |   80.480 |                            | tcc version 0.9.27                       |
 | Python                 | CPython        | 5552.407 |                            | Python 3.9.2                             |
 
-Pleasantly surpised to see go can beat C++ in certain benchmarks.
-Utterly surprised that third place (without parallelizing) is Pypy!
+These newer benchmarks used a Ryzen 9 7950x on Debian 12.
 
-A little puzzled by Rust. When running the benchmark several times to get a
-good average, the numbers vary like crazy. The first time is ~20 seconds, the
-next is nearly a minute! Not sure what's going on there. The time listed in the
-above table is the average of the "good" times. The worst was 85 seconds, but
-I'm guessing something weird was going on behind the scenes.
-
-Next up is Java and swift.
+| Language               | Implementation | Time (s) | Flags                      | Version                                  |
+| ---------------------- | -------------- | -------- | -------------------------- | ---------------------------------------- |
+| C                      | gcc            |   11.396 | -O3 -flto                  | gcc (Debian 12.2.0-14) 12.2.0            |
+| C++                    | g++            |   11.840 | -O3 -flto                  | g++ (Debian 12.2.0-14) 12.2.0            |
+| C                      | clang          |   12.199 | -O3 -flto                  | Debian clang version 14.0.6              |
+| C++                    | clang++        |   12.361 | -O3 -flto                  | Debian clang version 14.0.6              |
+| Fortran                | gfortran       |   12.633 | -O3 -flto                  | GNU Fortran (Debian 12.2.0-14) 12.2.0    |
+| Rust                   | rustc          |   12.681 | -C opt-level=3 -C lto=true | rustc 1.72.0 (5680fa18f 2023-08-23)      |
+| Python                 | Pypy           |   15.481 |                            | PyPy 7.3.11 with GCC 12.2.0              |
+| Go                     | golang         |   18.118 |                            | go 1.19.8                                |
+| Go                     | gccgo          |   18.932 | -O3 -flto                  | gccgo (Debian 12.2.0-14) 12.2.0          |
+| C                      | pcc            |   62.625 | -O2                        | Portable C Compiler 1.2.0.DEVEL 20220331 |
+| C                      | tcc            |   70.031 |                            | tcc version 0.9.27                       |
+| Python                 | CPython        | 1876.293 |                            | Python 3.11.2                            |
 
 # License
     newtonian_black_holes is free software: you can redistribute it and/or
