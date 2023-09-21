@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-/*  sqrt function is provided here. Different import for macOS vs. Linux.     */
+/*  C input-output routines provided here, like fopen, fclose, and fputs.     */
 #if canImport(Darwin)
 import Darwin
 #elseif canImport(Glibc)
@@ -27,25 +27,22 @@ import Glibc
 import Foundation
 #endif
 
-/*  Function for printing a simple message. Demonstrates basic syntax.        */
-func myPrintFunction(x: Double) -> String {
+struct PPM {
+    var file: Optional<UnsafeMutablePointer<_IO_FILE>>
 
-    /*  The sqrt function is imported from the C standard library above.      */
-    let y: Double = sqrt(x)
+    init(name: String) {
+        file = fopen(name, "w")
+    }
 
-    /*  Triple-quotes allow for line-continuation and implicit newlines.      */
-    return """
-        \rHello, World!
-        \rsqrt(\(x)) = \(y)
-    """
+    func initializeFromValues(x: UInt32, y: UInt32, type: Int) {
+        fputs("P\(type)\n\(x) \(y)\n255\n", file)
+    }
+
+    func initialize() {
+        self.initializeFromValues(x: 1024, y: 1024, type: 6)
+    }
+
+    func close() {
+        fclose(file)
+    }
 }
-/*  End of myPrintFunction.                                                   */
-
-/*  The input to the function.                                                */
-let input: Double = 2.0
-
-/*  The output. Pass the input to the function.                               */
-let output: String = myPrintFunction(x: input)
-
-/*  The print function appends a newline automatically.                       */
-print(output)
