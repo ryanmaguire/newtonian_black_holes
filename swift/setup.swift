@@ -18,20 +18,41 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
 
-struct Vec2 {
-    var x, y: Double
+let zSrc: Double = -10.0
+let zDetector: Double = 10.0
+let zDetectorSquared: Double = zDetector*zDetector
+let start: Double = -10.0
+let end: Double = 10.0
+let blackHoleRadius: Double = 1.0
+let blackHoleRadiusSquared = blackHoleRadius*blackHoleRadius
+let xSize: UInt32 = 1024
+let ySize: UInt32 = 1024
+let pxFactor: Double = (end - start) / Double(xSize - 1)
+let pyFactor: Double = (end - start) / Double(ySize - 1)
+let highlightThreshold: Double = 0.02
+let bx1: Double = -3.0
+let bx2: Double = +3.0
+let initialVelocity: Vec3 = Vec3(x: 0.0, y: 0.0, z: 1.0)
+
+func pixelToPoint(x: UInt32, y: UInt32) -> Vec3 {
+    let px: Double = start + pxFactor * Double(x)
+    let py: Double = start + pyFactor * Double(y)
+    return Vec3(x: px, y: py, z: zSrc)
 }
 
-extension Vec2 {
-    static func + (left: Vec2, right: Vec2) -> Vec2 {
-        return Vec2(x: left.x + right.x, y: left.y + right.y)
+func stop(u: Vec6) -> Bool {
+    if u.p.z >= zDetector {
+        return true
+    } else if u.p.normSquared() <= blackHoleRadiusSquared {
+        return true
+    } else {
+        return false
     }
+}
 
-    static func - (left: Vec2, right: Vec2) -> Vec2 {
-        return Vec2(x: left.x - right.x, y: left.y - right.y)
-    }
-
-    static func * (left: Double, right: Vec2) -> Vec2 {
-        return Vec2(x: left*right.x, y: left*right.y)
-    }
+func gravity(point: Vec3) -> Vec3 {
+    let norm: Double = point.norm()
+    let norm_squared = norm*norm
+    let factor: Double = -1.0 / (norm * norm_squared)
+    return factor * point
 }
