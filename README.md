@@ -78,9 +78,14 @@ These newer benchmarks used a Ryzen 9 7950x on Debian 12.
 | Python                 | Pypy           |   15.481 | PyPy 7.3.11 with GCC 12.2.0              |
 | Go                     | golang         |   18.118 | go 1.19.8                                |
 | Go                     | gccgo          |   18.932 | gccgo (Debian 12.2.0-14) 12.2.0          |
+| Swift                  | swiftc         |   36.579 | Swift version 5.9 (swift-5.9-RELEASE)    |
 | C                      | pcc            |   62.625 | Portable C Compiler 1.2.0.DEVEL 20220331 |
 | C                      | tcc            |   70.031 | tcc version 0.9.27                       |
 | Python                 | CPython        | 1876.293 | Python 3.11.2                            |
+
+Swift is the only example where performance *decreased* on the newer hardware.
+It may be worth trying older versions of the compiler. Or perhaps compiling the
+compiler from source.
 
 # License
     newtonian_black_holes is free software: you can redistribute it and/or
