@@ -24,6 +24,7 @@
 ;   Date:   2023/09/20                                                         ;
 ;------------------------------------------------------------------------------;
 PRO MAIN
+    START_TIME = SYSTIME(/SECONDS)
     XSIZE = 1024
     YSIZE = 1024
     INITIAL_VELOCITY = [0.0D, 0.0D, 1.0D]
@@ -69,4 +70,7 @@ PRO MAIN
 
     ; Close the file and exit the program.
     CLOSE, 1
+
+    END_TIME = SYSTIME(/SECONDS)
+    PRINT, "Total Time: ", DOUBLE(END_TIME - START_TIME)
 END
