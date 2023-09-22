@@ -51,6 +51,7 @@ The following used a Ryzen 9 3900x (12-core) on Debian 11.
 | go (w/Parallelization) | golang         |    2.646 | go 1.15.15                               |
 | go (w/Parallelization) | gccgo          |    2.921 | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
 | C                      | gcc            |   15.067 | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
+| Java                   | openJDK        |   16.022 | openjdk 17.0.7 2023-04-18                |
 | C                      | clang          |   16.440 | Debian clang version 11.0.1-2            |
 | Fortran                | gfortran       |   17.431 | GNU Fortran (Debian 10.2.1-6) 20210110   |
 | Python                 | Pypy           |   18.324 | PyPy 7.3.5 with GCC 10.2.1 20210110      |
@@ -76,6 +77,7 @@ These newer benchmarks used a Ryzen 9 7950x on Debian 12.
 | C++                    | clang++        |   12.361 | Debian clang version 14.0.6              |
 | Fortran                | gfortran       |   12.633 | GNU Fortran (Debian 12.2.0-14) 12.2.0    |
 | Rust                   | rustc          |   12.681 | rustc 1.72.0 (5680fa18f 2023-08-23)      |
+| Java                   | openJDK        |   12.910 | openjdk 17.0.8 2023-07-18                |
 | Python                 | Pypy           |   15.481 | PyPy 7.3.11 with GCC 12.2.0              |
 | Go                     | golang         |   18.118 | go 1.19.8                                |
 | Go                     | gccgo          |   18.932 | gccgo (Debian 12.2.0-14) 12.2.0          |

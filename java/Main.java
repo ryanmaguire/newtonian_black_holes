@@ -12,6 +12,7 @@ public class Main {
         int x, y;
         Color c;
 
+        double prog_factor = 100.0 / (double)(Setup.y_size);
         Gravity gravity = new Gravity();
         Stop stop = new Stop();
 
@@ -29,8 +30,13 @@ public class Main {
                 c = Color.checkerBoard(u);
                 c.write(ppm);
             }
-        }
 
+            if (y % 20 == 0) {
+              System.out.printf("Progress: %f%%     \r", prog_factor*(double)y);
+            }
+        }
+        System.out.println("Progress: 100%         ");
+        System.out.println("Done.");
         ppm.close();
     }
 }
