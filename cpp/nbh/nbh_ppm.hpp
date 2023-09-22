@@ -56,7 +56,23 @@ namespace nbh {
         inline void close(void);
     };
 
-    /*  Constructor from a name.                                              */
+    /**************************************************************************
+     *  Constructor:                                                          *
+     *      ppm                                                               *
+     *  Purpose:                                                              *
+     *      Creates a PPM file with a given file name.                        *
+     *  Arguments:                                                            *
+     *      name (const char *):                                              *
+     *          The file name of the output PPM (ex. "black_hole.ppm").       *
+     *  Outputs:                                                              *
+     *      PPM (nbh::ppm):                                                   *
+     *          A PPM struct whose FILE pointer points to a ppm file that has *
+     *          been given write permissions.                                 *
+     *  Notes:                                                                *
+     *      fopen returns NULL on failure. This function will print a warning *
+     *      if fopen fails. It is the callers responsibility to inspect the   *
+     *      FILE pointer before trying to use it.                             *
+     **************************************************************************/
     ppm::ppm(const char *name)
     {
         fp = std::fopen(name, "w");
@@ -66,10 +82,25 @@ namespace nbh {
             std::puts("ERROR: fopen failed and returned NULL.");
     }
 
-    /*  Print the preamble to the PPM file. A PPM file wants Pn followed by   *
-     *  three numbers. P6 means we're encoding an RGB image in binary format. *
-     *  The first two numbers are the number of pixels in the x and y axes.   *
-     *  The last number is the size of our color spectrum, which is 255.      */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      init                                                              *
+     *  Purpose:                                                              *
+     *      Print the preamble to the PPM file. A PPM file wants Pn followed  *
+     *      by three numbers. P6 means we're encoding an RGB image in binary  *
+     *      format. The first two numbers are the number of pixels in the x   *
+     *      and y axes. The last number is the size of our color spectrum,    *
+     *      which is 255.                                                     *
+     *  Arguments:                                                            *
+     *      x (unsigned int):                                                 *
+     *          The number of pixels in the x axis.                           *
+     *      y (unsigned int):                                                 *
+     *          The number of pixels in the y axis.                           *
+     *      type (int):                                                       *
+     *          The type of the PPM, options are 1 through 6.                 *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     **************************************************************************/
     inline void ppm::init(unsigned int x, unsigned int y, int type)
     {
         switch (type)
@@ -94,13 +125,34 @@ namespace nbh {
         }
     }
 
-    /*  Initialize using the values in "setup".                               */
+
+    /**************************************************************************
+     *  Method:                                                               *
+     *      init                                                              *
+     *  Purpose:                                                              *
+     *      Initialize a PPM using the values in "setup".                     *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     *  Method:                                                               *
+     *      Pass the default parameters to the other init function.           *
+     **************************************************************************/
     inline void ppm::init(void)
     {
         init(nbh::setup::xsize, nbh::setup::ysize, 6);
     }
 
-    /*  Method for closing the file pointer for the PPM.                      */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      close                                                             *
+     *  Purpose:                                                              *
+     *      Closes the file pointer in a PPM struct.                          *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     **************************************************************************/
     inline void ppm::close(void)
     {
         /*  Ensure the pointer is not NULL before trying to close it.         */
