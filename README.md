@@ -1,7 +1,7 @@
 # Table of Contents
 1. [Newtonian Black Holes](#nbh)
 2. [Benchmarks](#benchmarks)
-3. [Benchmarks (w/Parallelization)(#pbenchmarks)
+3. [Benchmarks (w/Parallelization)](#pbenchmarks)
 4. [License](#license)
 
 # Newtonian Black Holes <a name="nbh"></a>
