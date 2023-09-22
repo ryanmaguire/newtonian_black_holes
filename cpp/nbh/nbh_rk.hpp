@@ -34,6 +34,9 @@
 /*  Basic 6D vector struct given here.                                        */
 #include "nbh_vec6.hpp"
 
+/*  Function typedefs are provided here.                                      */
+#include "nbh_function_types.hpp"
+
 /*  Namespace for the mini-project. "Newtonian Black Holes."                  */
 namespace nbh {
 
@@ -53,19 +56,48 @@ namespace nbh {
         inline void reset_max_iters(unsigned int n);
 
         /*  Function for performing the Runge-Kutta method, provided below.   */
-        inline void path(nbh::vec6 &u,
-                         nbh::vec3 (*acc)(const nbh::vec3 &),
-                         bool (*stop)(const nbh::vec3 &));
+        inline void path(nbh::vec6 &u, acceleration acc, stopper stop);
     }
     /*  End of rk namespace.                                                  */
 
-    /*  Given a vector-valued acceleration a = acc(r), a starting position p, *
-     *  an initial velocity v, and a stopping condition stop, perform the RK4 *
-     *  method to numerically solve the system of motion. The initial         *
-     *  conditions (p, v) are given as the 6D vector u.                       */
-    inline void rk::path(nbh::vec6 &u,
-                         nbh::vec3 (*acc)(const nbh::vec3 &),
-                         bool (*stop)(const nbh::vec3 &))
+    /**************************************************************************
+     *  Function:                                                             *
+     *      rk::path                                                          *
+     *  Purpose:                                                              *
+     *      Given a vector-valued acceleration a = acc(r), a starting         *
+     *      position p, an initial velocity v, and a stopping condition stop, *
+     *      perform the RK4 method to numerically solve the system of motion. *
+     *      The initial conditions (p, v) are given by the 6D vector u.       *
+     *  Arguments:                                                            *
+     *      u (nbh::vec6 &):                                                  *
+     *          A pointer to a 6D vector that represents the initial position *
+     *          and velocity vectors of the particle.                         *
+     *      acc (acceleration):                                               *
+     *          A function that describes the equation of motion for the      *
+     *          particle.                                                     *
+     *      stop (stopper):                                                   *
+     *          A function that determines when to stop the RK4 method.       *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     *  Method:                                                               *
+     *      Apply fourth order Runge-Kutta method. Given initial conditions   *
+     *      (p0, v0) and time increment dt, we iteratively compute:           *
+     *                                                                        *
+     *          u_{n} = (p_{n}, v_{n})                                        *
+     *          a_{n} = acc(p_{n})                                            *
+     *          k1    = (v_{n}, a_{n})                                        *
+     *          k2    = u_{n} + k1 * (dt/2)                                   *
+     *          k3    = u_{n} + k2 * (dt/2)                                   *
+     *          k4    = u_{n} + k2 * dt                                       *
+     *                                                                        *
+     *      These are the so-called RK factors. We update u_{n} via:          *
+     *                                                                        *
+     *          u_{n+1} = (dt/6) * (k1 + 2*k2 + 2*k3 + k4)                    *
+     *                                                                        *
+     *      Do this until the stopper function tells you to stop, or until    *
+     *      you've done to many iterations.                                   *
+     **************************************************************************/
+    inline void rk::path(nbh::vec6 &u, acceleration acc, stopper stop)
     {
         /*  Variable for keeping track of the number of iterations.           */
         unsigned int n = 0U;
