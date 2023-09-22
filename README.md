@@ -96,6 +96,17 @@ Ryzen 9 3900x (12-core) on Debian 11.
 | go       | golang         |    2.646 | go 1.15.15                               |
 | go       | gccgo          |    2.921 | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
 
+Ryzen 9 7950x (16-core) on Debian 12.
+
+| Language | Implementation | Time (s) | Version                                  |
+| -------- | -------------- | -------- | ---------------------------------------- |
+| C        | gcc            |    0.665 | gcc (Debian 12.2.0-14) 12.2.0            |
+| C++      | g++            |    0.666 | g++ (Debian 12.2.0-14) 12.2.0            |
+| C++      | clang++        |    0.961 | Debian clang version 14.0.6              |
+| C        | clang          |    0.971 | Debian clang version 14.0.6              |
+| Go       | golang         |    1.334 | go 1.19.8                                |
+| Go       | gccgo          |    1.684 | gccgo (Debian 12.2.0-14) 12.2.0          |
+
 # License
     newtonian_black_holes is free software: you can redistribute it and/or
     modify it under the terms of the GNU General Public License as published by
