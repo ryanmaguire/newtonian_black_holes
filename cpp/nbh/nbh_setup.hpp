@@ -58,18 +58,21 @@ namespace nbh {
         static double black_hole_radius_sq = 1.0;
 
         /*  Number of pixels in the x and y axes.                             */
-        static const unsigned int xsize = 1024U;
-        static const unsigned int ysize = 1024U;
+        static unsigned int xsize = 1024U;
+        static unsigned int ysize = 1024U;
 
         /*  Factor used for converting from pixels to points in space.        */
-        static const double pxfact = (end-start)/static_cast<double>(xsize-1U);
-        static const double pyfact = (end-start)/static_cast<double>(ysize-1U);
+        static double pxfact = 0.019550342130987292;
+        static double pyfact = 0.019550342130987292;
 
         /*  Threshold for highlighting features (usually the origin).         */
         static const double highlight_threshold = 0.02;
 
-        /*  Function for changing the radius of the blackhole.                */
+        /*  Function for changing the radius of the black hole.               */
         inline void reset_radius(double r);
+
+        /*  Function for resetting the resolution of the PPM file.            */
+        inline void reset_size(unsigned int x, unsigned int y);
 
         /*  For two black holes, the centers lie on the x axis.               */
         static const double bhx1 = -3.0;
@@ -77,15 +80,81 @@ namespace nbh {
     }
     /*  End of "setup" namespace.                                             */
 
-    /*  Function for converting from pixel on src to point in space.          */
-    inline vec3 pixel_to_point(unsigned int x, unsigned int y)
+    /**************************************************************************
+     *  Function:                                                             *
+     *      setup::reset_radius                                               *
+     *  Purpose:                                                              *
+     *      Resets the radius of the black hole.                              *
+     *  Arguments:                                                            *
+     *      r (double):                                                       *
+     *          The new radius.                                               *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     **************************************************************************/
+    inline void setup::reset_radius(double r)
+    {
+        black_hole_radius = r;
+        black_hole_radius_sq = r*r;
+    }
+
+    /**************************************************************************
+     *  Function:                                                             *
+     *      setup::reset_size                                                 *
+     *  Purpose:                                                              *
+     *      Resets the size of the output PPM.                                *
+     *  Arguments:                                                            *
+     *      x (unsigned int):                                                 *
+     *          The number of pixels in the x direction.                      *
+     *      y (unsigned int):                                                 *
+     *          The number of pixels in the y direction.                      *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     **************************************************************************/
+    inline void setup::reset_size(unsigned int x, unsigned int y)
+    {
+        setup::xsize = x;
+        setup::ysize = y;
+        setup::pxfact = (setup::end - setup::start) / double(x - 1U);
+        setup::pyfact = (setup::end - setup::start) / double(y - 1U);
+    }
+
+    /**************************************************************************
+     *  Function:                                                             *
+     *      pixel_to_point.                                                   *
+     *  Purpose:                                                              *
+     *      Converts a pixel (x, y) on the PPM to a point in space.           *
+     *  Arguments:                                                            *
+     *      x (unsigned int):                                                 *
+     *          The x coordinate of the pixel.                                *
+     *      y (unsigned int):                                                 *
+     *          The y coordinate of the pixel.                                *
+     *  Outputs:                                                              *
+     *      p (nbh::vec3):                                                    *
+     *          The corresponding point in space to the given pixel.          *
+     *  Method:                                                               *
+     *      The point on the detector lies on the z = setup::z_src plane.     *
+     *      Use this and convert the (x, y) components of the pixel to the    *
+     *      (x, y) component on the detector.                                 *
+     **************************************************************************/
+    inline nbh::vec3 pixel_to_point(unsigned int x, unsigned int y)
     {
         const double xpt = setup::start + setup::pxfact*static_cast<double>(x);
         const double ypt = setup::start + setup::pyfact*static_cast<double>(y);
-        return vec3(xpt, ypt, setup::z_src);
+        return nbh::vec3(xpt, ypt, setup::z_src);
     }
 
-    /*  Function for determining if a photon still exists.                    */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      stop                                                              *
+     *  Purpose:                                                              *
+     *      Determines if a photon is still in motion for one black hole.     *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          The vector corresponding to the given photon.                 *
+     *  Outputs:                                                              *
+     *      halt (bool):                                                      *
+     *          Boolean for if the photon is still moving.                    *
+     **************************************************************************/
     inline bool stop(const nbh::vec3 &v)
     {
         /*  Case 1: The photon has reached the detector.                      */
@@ -97,11 +166,21 @@ namespace nbh {
             return true;
 
         /*  Otherwise, the photon is still moving. Don't stop.                */
-        else
-            return false;
+        return false;
     }
 
-    /*  Function for testing if a photon still exists with two black holes.   */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      stop2                                                             *
+     *  Purpose:                                                              *
+     *      Determines if a photon is still in motion for two black holes.    *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          The vector corresponding to the given photon.                 *
+     *  Outputs:                                                              *
+     *      halt (bool):                                                      *
+     *          Boolean for if the photon is still moving.                    *
+     **************************************************************************/
     inline bool stop2(const nbh::vec3 &p)
     {
         /*  The black holes lie on the x axis. Compute the displacements to p.*/
@@ -121,12 +200,22 @@ namespace nbh {
             return true;
 
         /*  Otherwise, the photon is still moving. Don't stop.                */
-        else
-            return false;
+        return false;
     }
 
-    /*  The acceleration under the force of gravity is given by Newton's      *
-     *  universal law of gravitation. This is the inverse square law.         */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      gravity                                                           *
+     *  Purpose:                                                              *
+     *      Computes the acceleration given by the inverse square law from    *
+     *      Newton's universal law of gravitation.                            *
+     *  Arguments:                                                            *
+     *      p (const nbh::vec3 &):                                            *
+     *          The position vector of the particle.                          *
+     *  Outputs:                                                              *
+     *      a (nbh::vec3):                                                    *
+     *          The acceleration of the particle.                             *
+     **************************************************************************/
     inline nbh::vec3 gravity(const nbh::vec3 &p)
     {
         /*  Given a vector p, Newton's universal law of gravitation says the  *
@@ -141,9 +230,20 @@ namespace nbh {
         return nbh::vec3(-p.x*factor, -p.y*factor, -p.z*factor);
     }
 
-    /*  The acceleration under the force of gravity is given by Newton's      *
-     *  universal law of gravitation. This is the inverse square law. We use  *
-     *  the principle of superposition to add a second black hole.            */
+    /**************************************************************************
+     *  Function:                                                             *
+     *      gravity2                                                          *
+     *  Purpose:                                                              *
+     *      Computes the acceleration given by the inverse square law from    *
+     *      Newton's universal law of gravitation for two gravitating objects.*
+     *      This is done using the principle of superposition.                *
+     *  Arguments:                                                            *
+     *      p (const nbh::vec3 &):                                            *
+     *          The position vector of the particle.                          *
+     *  Outputs:                                                              *
+     *      a (nbh::vec3):                                                    *
+     *          The acceleration of the particle.                             *
+     **************************************************************************/
     inline nbh::vec3 gravity2(const nbh::vec3 &p)
     {
         /*  The force from one black hole is -R / ||R||^3, where R is the     *
@@ -161,13 +261,6 @@ namespace nbh {
         /*  The net force is computed by the principle of superposition.      *
          *  Add the two individual forces and return.                         */
         return f1 + f2;
-    }
-
-    /*  Function for changing the radius of the blackhole.                    */
-    inline void setup::reset_radius(double r)
-    {
-        black_hole_radius = r;
-        black_hole_radius_sq = r*r;
     }
 }
 /*  End of "nbh" namespace.                                                   */
