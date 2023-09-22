@@ -14,4 +14,10 @@ public class Setup {
     public static double black_hole_radius_squared
          = black_hole_radius*black_hole_radius;
 
+    public static Vec3 pixelToPoint(int x, int y) {
+        double xpt = start + px_factor * (double)x;
+        double ypt = start + py_factor * (double)y;
+        double zpt = z_src;
+        return new Vec3(xpt, ypt, zpt);
+    }
 }

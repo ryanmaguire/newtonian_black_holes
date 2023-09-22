@@ -28,6 +28,10 @@ package nbh;
 public class Vec6 {
     public Vec3 p, v;
 
+    public Vec6() {
+
+    }
+
     public Vec6(Vec3 position, Vec3 velocity) {
         p = position;
         v = velocity;
@@ -42,7 +46,7 @@ public class Vec6 {
     }
 
     public Vec6 add(Vec6 u) {
-        return new Vec6(p.add(u.p), v.add(u.p));
+        return new Vec6(p.add(u.p), v.add(u.v));
     }
 
     public void addTo(Vec6 u) {
@@ -51,7 +55,7 @@ public class Vec6 {
     }
 
     public Vec6 subtract(Vec6 u) {
-        return new Vec6(p.subtract(u.p), v.subtract(u.p));
+        return new Vec6(p.subtract(u.p), v.subtract(u.v));
     }
 
     public void subtractFrom(Vec6 u) {

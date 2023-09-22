@@ -1,6 +1,10 @@
 package nbh;
 
 public class Stop implements Stopper {
+    public Stop() {
+
+    }
+
     public boolean stop(Vec6 u) {
         if (u.p.z >= Setup.z_detector) {
             return true;

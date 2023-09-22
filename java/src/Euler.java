@@ -1,10 +1,10 @@
 package nbh;
 
 public class Euler {
-    int max_iterations = 65535;
-    double time_increment = 0.01;
+    static int max_iterations = 65535;
+    static double time_increment = 0.01;
 
-    public void path(Vec6 u, Acceleration acc, Stopper stopper) {
+    public static void path(Vec6 u, Acceleration acc, Stopper stopper) {
         int iters = 0;
         Vec3 a = new Vec3(0.0, 0.0, 0.0);
 
