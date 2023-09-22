@@ -72,20 +72,17 @@ These newer benchmarks used a Ryzen 9 7950x on Debian 12.
 | C                      | gcc            |   11.396 | gcc (Debian 12.2.0-14) 12.2.0            |
 | C++                    | g++            |   11.840 | g++ (Debian 12.2.0-14) 12.2.0            |
 | C                      | clang          |   12.199 | Debian clang version 14.0.6              |
+| Swift                  | swiftc         |   12.216 | Swift version 5.9 (swift-5.9-RELEASE)    |
 | C++                    | clang++        |   12.361 | Debian clang version 14.0.6              |
 | Fortran                | gfortran       |   12.633 | GNU Fortran (Debian 12.2.0-14) 12.2.0    |
 | Rust                   | rustc          |   12.681 | rustc 1.72.0 (5680fa18f 2023-08-23)      |
 | Python                 | Pypy           |   15.481 | PyPy 7.3.11 with GCC 12.2.0              |
 | Go                     | golang         |   18.118 | go 1.19.8                                |
 | Go                     | gccgo          |   18.932 | gccgo (Debian 12.2.0-14) 12.2.0          |
-| Swift                  | swiftc         |   36.579 | Swift version 5.9 (swift-5.9-RELEASE)    |
 | C                      | pcc            |   62.625 | Portable C Compiler 1.2.0.DEVEL 20220331 |
 | C                      | tcc            |   70.031 | tcc version 0.9.27                       |
 | Python                 | CPython        | 1876.293 | Python 3.11.2                            |
-
-Swift is the only example where performance *decreased* on the newer hardware.
-It may be worth trying older versions of the compiler. Or perhaps compiling the
-compiler from source.
+| IDL                    | GDL            | 6677.710 | GNU Data Language, Version 1.0.1         |
 
 # License
     newtonian_black_holes is free software: you can redistribute it and/or
