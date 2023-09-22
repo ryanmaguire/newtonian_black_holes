@@ -81,13 +81,38 @@ namespace nbh {
         inline double rhosq(void) const;
     };
 
-    /*  Empty constructor. Do nothing, just return.                           */
+    /**************************************************************************
+     *  Constructor:                                                          *
+     *      nbh::vec3                                                         *
+     *  Purpose:                                                              *
+     *      Creates an "empty" vec3 struct. Nothing is initialized.           *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Outputs:                                                              *
+     *      v (nbh::vec3):                                                    *
+     *          An uninitialized vector.                                      *
+     **************************************************************************/
     vec3::vec3(void)
     {
         return;
     }
 
-    /*  Constructor from the Euclidean components.                            */
+    /**************************************************************************
+     *  Constructor:                                                          *
+     *      nbh::vec3                                                         *
+     *  Purpose:                                                              *
+     *      Creates a 3D vector from the specified Cartesian coordinates.     *
+     *  Arguments:                                                            *
+     *      a (double):                                                       *
+     *          The x component of the vector.                                *
+     *      b (double):                                                       *
+     *          The y component of the vector.                                *
+     *      c (double):                                                       *
+     *          The z component of the vector.                                *
+     *  Outputs:                                                              *
+     *      v (nbh::vec3):                                                    *
+     *          The 3D vector (a, b, c).                                      *
+     **************************************************************************/
     vec3::vec3(double a, double b, double c)
     {
         /*  Set each of the components and return.                            */
@@ -96,13 +121,47 @@ namespace nbh {
         z = c;
     }
 
-    /*  Vector addition, performed component-wise.                            */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      +                                                                 *
+     *  Purpose:                                                              *
+     *      Adds two vectors in R^3.                                          *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A 3D vector.                                                  *
+     *      w (const nbh::vec3 &):                                            *
+     *          Another 3D vector.                                            *
+     *  Outputs:                                                              *
+     *      sum (nbh::vec3):                                                  *
+     *          The vector sum of v and w.                                    *
+     *  Method:                                                               *
+     *      Vector addition is performed component-wise. That is, given two   *
+     *      vectors v = (vx, vy, vz) and w = (wx, wy, wz), the sum is:        *
+     *                                                                        *
+     *          sum = v + w                                                   *
+     *              = (vx, vy, vz) + (wx, wy, wz)                             *
+     *              = (vx + wx, vy + wy, vz + wz)                             *
+     *                                                                        *
+     *      This is computed and the sum is returned.                         *
+     **************************************************************************/
     inline vec3 operator + (const vec3 &v, const vec3 &u)
     {
         return vec3(v.x + u.x, v.y + u.y, v.z + u.z);
     }
 
-    /*  Vector addition where the result is stored in the first variable.     */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      +=                                                                *
+     *  Purpose:                                                              *
+     *      Adds two vectors in R^3 and stores the result in *this*.          *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A 3D vector.                                                  *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     *  Method:                                                               *
+     *      Add the components of v to *this*.                                *
+     **************************************************************************/
     inline void vec3::operator += (const vec3 &v)
     {
         x += v.x;
@@ -110,13 +169,47 @@ namespace nbh {
         z += v.z;
     }
 
-    /*  Vector subtraction, performed component-wise.                         */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      -                                                                 *
+     *  Purpose:                                                              *
+     *      Subtracts two vectors in R^3.                                     *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A 3D vector.                                                  *
+     *      w (const nbh::vec3 &):                                            *
+     *          Another 3D vector.                                            *
+     *  Outputs:                                                              *
+     *      diff (nbh::vec3):                                                 *
+     *          The vector difference of v and w.                             *
+     *  Method:                                                               *
+     *      Vector subtraction is performed component-wise. Given two vectors *
+     *      v = (vx, vy, vz) and w = (wx, wy, wz), the difference is:         *
+     *                                                                        *
+     *          diff = v - w                                                  *
+     *               = (vx, vy, vz) - (wx, wy, wz)                            *
+     *               = (vx - wx, vy - wy, vz - wz)                            *
+     *                                                                        *
+     *      This is computed and the difference is returned.                  *
+     **************************************************************************/
     inline vec3 operator - (const vec3 &v, const vec3 &u)
     {
         return vec3(v.x - u.x, v.y - u.y, v.z - u.z);
     }
 
-    /*  Vector subtraction where the result is stored in the first variable.  */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      -=                                                                *
+     *  Purpose:                                                              *
+     *      Subtracts two vectors in R^3 and stores the result in *this*.     *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A 3D vector.                                                  *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     *  Method:                                                               *
+     *      Subtract the components of v from *this*.                         *
+     **************************************************************************/
     inline void vec3::operator -= (const vec3 &v)
     {
         x -= v.x;
@@ -124,45 +217,165 @@ namespace nbh {
         z -= v.z;
     }
 
-    /*  Scalar multiplication on the left.                                    */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      *                                                                 *
+     *  Purpose:                                                              *
+     *      Performs scalar multiplication on the left.                       *
+     *  Arguments:                                                            *
+     *      a (double):                                                       *
+     *          A real number.                                                *
+     *      v (const nbh::vec3 &):                                            *
+     *          A reference to a vector.                                      *
+     *  Outputs:                                                              *
+     *      prod (nbh::vec3):                                                 *
+     *          The scalar product a*v.                                       *
+     *  Method:                                                               *
+     *      Scalar multiplication is performed component-wise. That is, if v  *
+     *      is the vector v = (x, y, z), then the product is:                 *
+     *                                                                        *
+     *          prod = a*v                                                    *
+     *               = a*(x, y, z)                                            *
+     *               = (a*x, a*y, a*z)                                        *
+     *                                                                        *
+     *      This is computed and the product is returned.                     *
+     **************************************************************************/
     inline vec3 operator * (double a, const vec3 &v)
     {
         return vec3(a*v.x, a*v.y, a*v.z);
     }
 
-    /*  Scalar multiplication on the right.                                   */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      *                                                                 *
+     *  Purpose:                                                              *
+     *      Performs scalar multiplication on the right.                      *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A reference to a vector.                                      *
+     *      a (double):                                                       *
+     *          A real number.                                                *
+     *  Outputs:                                                              *
+     *      prod (nbh::vec3):                                                 *
+     *          The scalar product v*a.                                       *
+     *  Method:                                                               *
+     *      Mimicry of scalar multiplication on the left.                     *
+     **************************************************************************/
     inline vec3 operator * (const vec3 &v, double a)
     {
-        return a*v;
+        return vec3(v.x*a, v.y*a, v.z*a);
     }
 
-    /*  Scalar multiplication where the result is stored in the struct.       */
-    inline void vec3::operator *= (double r)
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      *=                                                                *
+     *  Purpose:                                                              *
+     *      Performs scalar multiplication and stores the result in *this*.   *
+     *  Arguments:                                                            *
+     *      a (double):                                                       *
+     *          A real number.                                                *
+     *  Outputs:                                                              *
+     *      None.                                                             *
+     *  Method:                                                               *
+     *      Multiply the components of *this* by a and return.                *
+     **************************************************************************/
+    inline void vec3::operator *= (double a)
     {
-        x *= r;
-        y *= r;
-        z *= r;
+        x *= a;
+        y *= a;
+        z *= a;
     }
 
-    /*  Dot product, defined as the sum of the component-wise products.       */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      dot                                                               *
+     *  Purpose:                                                              *
+     *      Performs the Euclidean dot product in R^3.                        *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A reference to a vector.                                      *
+     *  Outputs:                                                              *
+     *      dot (double):                                                     *
+     *          The dot product *this* . v.                                   *
+     *  Method:                                                               *
+     *      The Euclidean dot product sums the products of the components.    *
+     *      Given two vectors v = (vx, vy, vz) and w = (wx, wy, wz),          *
+     *      the dot product is:                                               *
+     *                                                                        *
+     *          v.w = (vx, vy, vz) . (wx, wy, wz)                             *
+     *              = vx*wx + vy*wy + vz*wz                                   *
+     *                                                                        *
+     *      This is computed and the sum of products is returned.             *
+     **************************************************************************/
     inline double vec3::dot(const vec3 &v) const
     {
         return v.x*x + v.y*y + v.z*z;
     }
 
-    /*  Operator for the dot product, for shorthand use.                      */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      %                                                                 *
+     *  Purpose:                                                              *
+     *      Provides an operator for the dot product. Shorthand use.          *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A reference to a vector.                                      *
+     *      w (const nbh::vec3 &):                                            *
+     *          Another reference to a vector.                                *
+     *  Outputs:                                                              *
+     *      dot (double):                                                     *
+     *          The dot product v . w.                                        *
+     *  Method:                                                               *
+     *      Use the "dot" method and return.                                  *
+     **************************************************************************/
     inline double operator % (const vec3 &v, const vec3 &u)
     {
         return v.dot(u);
     }
 
-    /*  Three-dimensional cross-product.                                      */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      cross                                                             *
+     *  Purpose:                                                              *
+     *      Performs the Euclidean cross product in R^3.                      *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A reference to a vector.                                      *
+     *  Outputs:                                                              *
+     *      cross (nbh::vec3):                                                *
+     *          The cross product *this* x v.                                 *
+     *  Method:                                                               *
+     *      The Euclidean cross is given by the right-hand rule. v x w is the *
+     *      the unique vector orthogonal to v and w with right-handed         *
+     *      orientation and magnitude given by ||v|| ||w|| sin(theta), theta  *
+     *      being the angle between v and w. This can be computed explicitly  *
+     *      as follows. Given  v = (vx, vy, vz) and w = (wx, wy, wz),         *
+     *      the cross product is:                                             *
+     *                                                                        *
+     *          cross = v x w                                                 *
+     *                = (vx, vy, vz) x (wx, wy, wz)                           *
+     *                = (vy*wz - vz*wy, vz*wx - vx*wz, vx*wy - vy*wx)         *
+     *                                                                        *
+     *      These components are computed and the cross product is returned.  *
+     **************************************************************************/
     inline vec3 vec3::cross(const vec3 &v) const
     {
         return vec3(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
     }
 
-    /*  Cross-product where the result is stored in the struct.               */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      crosswith                                                         *
+     *  Purpose:                                                              *
+     *      Performs the cross product and stores the result in *this*.       *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A reference to a vector.                                      *
+     *  Outputs:                                                              *
+     *      None.                                                             *
+     *  Method:                                                               *
+     *      Mimic the "cross" method, but be careful of overwriting variables.*
+     **************************************************************************/
     inline void vec3::crosswith(const vec3 &v)
     {
         /*  Save these variables for later.                                   */
@@ -175,39 +388,135 @@ namespace nbh {
         z = a*v.y - b*v.x;
     }
 
-    /*  Shorthand operator for the cross-product. The "wedge" product is a    *
-     *  generalization of the cross-product, so it is fitting to use ^.       */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      ^                                                                 *
+     *  Purpose:                                                              *
+     *      Provides an operator for the cross product. Shorthand use.        *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A reference to a vector.                                      *
+     *      w (const nbh::vec3 &):                                            *
+     *          Another reference to a vector.                                *
+     *  Outputs:                                                              *
+     *      cross (nbh::vec3):                                                *
+     *          The cross product v x w.                                      *
+     *  Method:                                                               *
+     *      Use the "cross" method and return.                                *
+     *  Notes:                                                                *
+     *      The "wedge product" is a generalization of the cross product, so  *
+     *      it is fitting to use the "^" symbol.                              *
+     **************************************************************************/
     inline vec3 operator ^ (const vec3 &v, const vec3 &u)
     {
         return v.cross(u);
     }
 
-    /*  Similar operator for the cross product. Result is stored in struct.   */
+    /**************************************************************************
+     *  Operator:                                                             *
+     *      ^=                                                                *
+     *  Purpose:                                                              *
+     *      Provides an operator for the cross product. Shorthand use.        *
+     *  Arguments:                                                            *
+     *      v (const nbh::vec3 &):                                            *
+     *          A reference to a vector.                                      *
+     *  Outputs:                                                              *
+     *      None (void).                                                      *
+     *  Method:                                                               *
+     *      Use the "crosswith" method and return.                            *
+     **************************************************************************/
     inline void vec3::operator ^= (const vec3 &u)
     {
         this->crosswith(u);
     }
 
-    /*  A method for computing the Euclidean norm of a vector.                */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      norm                                                              *
+     *  Purpose:                                                              *
+     *      Computes the Euclidean, or L2, norm of a vector in R^3.           *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Outputs:                                                              *
+     *      norm_v (double):                                                  *
+     *          The norm, or magnitude, or length of the vector v.            *
+     *  Method:                                                               *
+     *      Use the Pythagorean theorem. Given v = (x, y, z) we have:         *
+     *                                                                        *
+     *          ||v|| = ||(x, y, z)||                                         *
+     *                = sqrt(x^2 + y^2 + z^2)                                 *
+     *                                                                        *
+     *      Compute and return the norm.                                      *
+     **************************************************************************/
     inline double vec3::norm(void) const
     {
         return std::sqrt(x*x + y*y + z*z);
     }
 
-    /*  A method for computing the square of the Euclidean norm of a vector.  *
-     *  This is computationally useful since it avoids redundant square roots.*/
+    /**************************************************************************
+     *  Method:                                                               *
+     *      normsq                                                            *
+     *  Purpose:                                                              *
+     *      Computes the square of the Euclidean norm of a vector in R^3.     *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Outputs:                                                              *
+     *      norm_v_sq (double):                                               *
+     *          The square of the magnitude of *this*.                        *
+     *  Method:                                                               *
+     *      Use the Pythagorean theorem. Given v = (x, y, z) we have:         *
+     *                                                                        *
+     *          ||v||^2 = ||(x, y, z)||^2                                     *
+     *                  = x^2 + y^2 + z^2                                     *
+     *                                                                        *
+     *      Compute and return.                                               *
+     **************************************************************************/
     inline double vec3::normsq(void) const
     {
         return x*x + y*y + z*z;
     }
 
-    /*  Computes the azimuthal radius, sqrt(x^2 + y^2).                       */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      rho                                                               *
+     *  Purpose:                                                              *
+     *      Computes the magnitude of the azimuthal part of a vector.         *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Outputs:                                                              *
+     *      rho_v (double):                                                   *
+     *          The magnitude of the azimuthal part of *this*.                *
+     *  Method:                                                               *
+     *      Use the Pythagorean theorem. Given v = (x, y, z) we have:         *
+     *                                                                        *
+     *          rho = ||(x, y)||                                              *
+     *              = sqrt(x^2 + y^2)                                         *
+     *                                                                        *
+     *      Compute and return.                                               *
+     **************************************************************************/
     inline double vec3::rho(void) const
     {
         return std::sqrt(x*x + y*y);
     }
 
-    /*  Computes the square of the azimuthal radius, x^2 + y^2.               */
+    /**************************************************************************
+     *  Method:                                                               *
+     *      rhosq                                                             *
+     *  Purpose:                                                              *
+     *      Computes the square of magnitude of the azimuthal part of *this*. *
+     *  Arguments:                                                            *
+     *      None (void).                                                      *
+     *  Outputs:                                                              *
+     *      rho_v_sq (double):                                                *
+     *          The square of the magnitude of the azimuthal part of *this*.  *
+     *  Method:                                                               *
+     *      Use the Pythagorean theorem. Given v = (x, y, z) we have:         *
+     *                                                                        *
+     *          rho^2 = ||(x, y)||^2                                          *
+     *                = x^2 + y^2                                             *
+     *                                                                        *
+     *      Compute and return.                                               *
+     **************************************************************************/
     inline double vec3::rhosq(void) const
     {
         return x*x + y*y;
