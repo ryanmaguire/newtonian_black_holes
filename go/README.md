@@ -2,11 +2,11 @@
 The files are written in go without any dependences (other than the
 standard library). You can build with `go` or `gccgo`. For example:
 ```
-gccgo -O3 nbh.go newtonian_black_hole.go -o test.out
+gccgo -O3 nbh*.go newtonian_black_hole.go -o main
 ```
 Similarly:
 ```
-go build nbh.go newtonian_black_hole.go
+go build -o main nbh*.go newtonian_black_hole.go
 ```
 
 # License
