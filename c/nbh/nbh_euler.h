@@ -139,5 +139,70 @@ nbh_euler_path(struct nbh_vec6 *u, acceleration acc, stopper stop)
 }
 /*  End of nbh_euler_path.                                                    */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_euler_normalized_path                                             *
+ *  Purpose:                                                                  *
+ *      Perhaps the worst part of the previous "Newtonian approximation" is   *
+ *      that the speed of light is not constant. It increases under the force *
+ *      of gravity, and very quickly exceeds the speed of light. This idea    *
+ *      halts that. The acceleration is only allowed to act in a direction    *
+ *      orthogonal to the velocity vector. This keeps the speed constant.     *
+ *      The derivation for this is straight-forward:                          *
+ *                                                                            *
+ *                        v . a = 0                                           *
+ *                  => 2(v . a) = 0                                           *
+ *             => v . a + a . v = 0                                           *
+ *            => d / dt (v . v) = 0                                           *
+ *          => d / dt (||v||^2) = 0                                           *
+ *                   => ||v||^2 = constant                                    *
+ *                     => ||v|| = constant                                    *
+ *  Arguments:                                                                *
+ *      u (struct nbh_vec6 *):                                                *
+ *          A pointer to a 6D vector that represents the initial position and *
+ *          velocity vectors of the particle.                                 *
+ *      acc (acceleration):                                                   *
+ *          A function that describes the equation of motion for the particle.*
+ *      stop (stopper):                                                       *
+ *          A stopper function that determines when to stop Euler's method.   *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      Same as before, but at each step compute the orthogonal component of  *
+ *      the acceleration a along the velocity vector v and use this.          *
+ ******************************************************************************/
+NBH_INLINE void
+nbh_euler_normalized_path(struct nbh_vec6 *u, acceleration acc, stopper stop)
+{
+    /*  Index for keeping track of the number of iterations performed.        */
+    unsigned int n = 0U;
+
+    /*  Keep performing Euler's method until we hit the detector or perform   *
+     *  too many iterations.                                                  */
+    while (!stop(&u->p) && n < nbh_euler_max_iters)
+    {
+        /*  Compute the acceleration at the point p.                          */
+        struct nbh_vec3 a = acc(&u->p);
+
+        /*  To avoid changing the speed of light, get the orthogonal part of  *
+         *  a along v. If a and v are orthogonal, ||v|| is constant.          */
+        a = nbh_vec3_orthogonal_part(&a, &u->v);
+
+        /*  Perform Euler's method in two steps for both v' = a and p' = v.   */
+        nbh_vec3_scaled_addto(&u->p, nbh_euler_time_increment, &u->v);
+        nbh_vec3_scaled_addto(&u->v, nbh_euler_time_increment, &a);
+
+        /*  Just to be on the paranoid side, normalize v. As the dt factor    *
+         *  tends to zero, the norm of v will be closer to a constant. But    *
+         *  for any fixed positive dt there will be some deviation in the     *
+         *  value of ||v||. Correct for this by normalizing.                  */
+        nbh_vec3_normalizeself(&u->v);
+
+        /*  Update the counter to avoid an infinite loop.                     */
+        ++n;
+    }
+}
+/*  End of nbh_euler_normalized_path.                                         */
+
 #endif
 /*  End of include guard.                                                     */
