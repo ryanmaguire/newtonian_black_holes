@@ -545,5 +545,125 @@ nbh_vec3_rhosq(const struct nbh_vec3 *v)
 }
 /*  End of nbh_vec3_rhosq.                                                    */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_vec3_normalize                                                    *
+ *  Purpose:                                                                  *
+ *      Computes the unit vector to a given vector.                           *
+ *  Arguments:                                                                *
+ *      v (const struct nbh_vec3 *):                                          *
+ *          A pointer to a vector in R^3.                                     *
+ *  Outputs:                                                                  *
+ *      v_hat (struct nbh_vec3):                                              *
+ *          The unit vector in the direction of v.                            *
+ *  Method:                                                                   *
+ *      The vector v / ||v|| is of unit length and in the same direction.     *
+ *  Notes:                                                                    *
+ *      If the input is the zero vector, the zero vector is returned.         *
+ ******************************************************************************/
+NBH_INLINE struct nbh_vec3
+nbh_vec3_normalize(const struct nbh_vec3 *v)
+{
+    /*  We need to check if ||v|| is non-zero. Avoid a wasteful call to the   *
+     *  square root function by checking ||v||^2 and examining this.          */
+    const double norm_sq = nbh_vec3_normsq(v);
+
+    /*  If the input is the zero vector, output the zero vector. No change.   */
+    if (norm_sq == 0.0)
+        return *v;
+
+    /*  Otherwise compute v / ||v|| to normalize the input.                   */
+    return nbh_vec3_scale(1.0 / sqrt(norm_sq), v);
+}
+/*  End of nbh_vec3_normalize.                                                */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_vec3_normalizeself                                                *
+ *  Purpose:                                                                  *
+ *      Normalizes a given vector.                                            *
+ *  Arguments:                                                                *
+ *      v (struct nbh_vec3 *):                                                *
+ *          A pointer to a vector in R^3.                                     *
+ *  Outputs:                                                                  *
+ *      None (void).                                                          *
+ *  Method:                                                                   *
+ *      The vector v / ||v|| is of unit length and in the same direction.     *
+ *  Notes:                                                                    *
+ *      If the input is the zero vector, the zero vector is returned.         *
+ ******************************************************************************/
+NBH_INLINE void
+nbh_vec3_normalizeself(struct nbh_vec3 *v)
+{
+    /*  We need to check if ||v|| is non-zero. Avoid a wasteful call to the   *
+     *  square root function by checking ||v||^2 and examining this.          */
+    const double norm_sq = nbh_vec3_normsq(v);
+
+    /*  If the input is the zero vector, output the zero vector. No change.   */
+    if (norm_sq == 0.0)
+        return;
+
+    /*  Otherwise compute v / ||v|| to normalize the input.                   */
+    nbh_vec3_scaleby(1.0 / sqrt(norm_sq), v);
+}
+/*  End of nbh_vec3_normalizeself.                                            */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_vec3_component                                                    *
+ *  Purpose:                                                                  *
+ *      Computes the component of one vector along another.                   *
+ *  Arguments:                                                                *
+ *      v (const struct nbh_vec3 *):                                          *
+ *          A pointer to a vector in R^3.                                     *
+ *      w (const struct nbh_vec3 *):                                          *
+ *          Another pointer to a vector in R^3.                               *
+ *  Outputs:                                                                  *
+ *      proj_w_of_v (struct nbh_vec3):                                        *
+ *          The projection of v along the vector w.                           *
+ *  Method:                                                                   *
+ *      Use the projection formula ((v . w) / ||w||^2) * w.                   *
+ *  Notes:                                                                    *
+ *      No checks are made for the zero vector.                               *
+ ******************************************************************************/
+NBH_INLINE struct nbh_vec3
+nbh_vec3_component(const struct nbh_vec3 *v, const struct nbh_vec3 *w)
+{
+    /*  The projection factor is (v . w) / ||w||^2, compute this.             */
+    const double factor = nbh_vec3_dot_product(v, w) / nbh_vec3_normsq(w);
+
+    /*  The component is parallel to w. Return w scaled by the scale factor.  */
+    return nbh_vec3_scale(factor, w);
+}
+/*  End of nbh_vec3_component.                                                */
+
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_vec3_orthogonal_part                                              *
+ *  Purpose:                                                                  *
+ *      Computes the orthogonal component of one vector along another.        *
+ *  Arguments:                                                                *
+ *      v (const struct nbh_vec3 *):                                          *
+ *          A pointer to a vector in R^3.                                     *
+ *      w (const struct nbh_vec3 *):                                          *
+ *          Another pointer to a vector in R^3.                               *
+ *  Outputs:                                                                  *
+ *      orth_w_of_v (struct nbh_vec3):                                        *
+ *          The orthogonal projection of v along the vector w.                *
+ *  Method:                                                                   *
+ *      Use the projection formula comp = ((v . w) / ||w||^2) * w. The        *
+ *      orthogonal component of v along w is v - comp.                        *
+ *  Notes:                                                                    *
+ *      No checks are made for the zero vector.                               *
+ ******************************************************************************/
+NBH_INLINE struct nbh_vec3
+nbh_vec3_orthogonal_part(const struct nbh_vec3 *v, const struct nbh_vec3 *w)
+{
+    /*  The orthogonal part is v minus the parallel part. Compute this.       */
+    const struct nbh_vec3 component = nbh_vec3_component(v, w);
+    return nbh_vec3_subtract(v, &component);
+}
+/*  End of nbh_vec3_orthogonal_part.                                          */
+
 #endif
 /*  End of include guard.                                                     */
