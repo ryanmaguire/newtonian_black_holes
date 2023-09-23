@@ -18,7 +18,7 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Provides all tools needed to raytace a Newtonian black hole.          *
+ *      Provides all tools needed to raytrace a Newtonian black hole.         *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/04/03                                                        *
