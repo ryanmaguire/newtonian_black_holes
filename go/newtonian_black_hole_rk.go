@@ -23,10 +23,9 @@
  *  Author: Ryan Maguire                                                      *
  *  Date:   2023/04/15                                                        *
  ******************************************************************************/
-
 package main
 
 func main() {
-    var name string = "newtonian_black_hole_rk.ppm"
+    const name string = "newtonian_black_hole_rk.ppm"
     Run(Gravity, Stop, CheckerBoard, RKPath, name)
 }

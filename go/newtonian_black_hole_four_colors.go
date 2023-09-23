@@ -21,11 +21,11 @@
  *      Basic test of the nbh routines. Generates a single black hole.        *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
- *  Date:   2023/04/15                                                        *
+ *  Date:   2023/09/23                                                        *
  ******************************************************************************/
 package main
 
 func main() {
-    const name string = "newtonian_black_hole.ppm"
-    Run(Gravity, Stop, CheckerBoard, EulerPath, name)
+    const name string = "newtonian_black_hole_four_colors.ppm"
+    Run(Gravity, Stop, CheckerBoardFour, EulerPath, name)
 }

@@ -18,14 +18,14 @@
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************
  *  Purpose:                                                                  *
- *      Basic test of the nbh routines. Generates a single black hole.        *
+ *      Generates a single black hole and highlights the origin.              *
  ******************************************************************************
  *  Author: Ryan Maguire                                                      *
- *  Date:   2023/04/15                                                        *
+ *  Date:   2023/09/23                                                        *
  ******************************************************************************/
 package main
 
 func main() {
-    const name string = "newtonian_black_hole.ppm"
-    Run(Gravity, Stop, CheckerBoard, EulerPath, name)
+    const name string = "newtonian_black_hole_center_highlight.ppm"
+    Run(Gravity, Stop, CheckerBoardHighlight, EulerPath, name)
 }
