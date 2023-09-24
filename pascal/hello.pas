@@ -1,7 +1,8 @@
 PROGRAM Hello;
 USES
     nbh_Vec3,
-    nbh_Vec6;
+    nbh_Vec6,
+    nbh_Euler;
 
 VAR
     P, V: Vec3;
