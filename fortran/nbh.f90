@@ -24,9 +24,9 @@
 !   Date:   2023/09/20                                                         !
 !------------------------------------------------------------------------------!
 PROGRAM MAIN
-    USE COLORS
-    USE SETUP
-    USE EULER
+    USE NBH_COLORS
+    USE NBH_SETUP
+    USE NBH_EULER
     IMPLICIT NONE
     REAL :: P(3)
     REAL :: V(3)

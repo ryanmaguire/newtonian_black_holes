@@ -23,7 +23,7 @@
 !   Author: Ryan Maguire                                                       !
 !   Date:   2023/09/20                                                         !
 !------------------------------------------------------------------------------!
-MODULE EULER
+MODULE NBH_EULER
     IMPLICIT NONE
 
     ! Maximum number of iterations allowed in Euler's method.
@@ -99,4 +99,4 @@ MODULE EULER
             ITERS = ITERS + 1
         END DO
     END SUBROUTINE PATH
-END MODULE EULER
+END MODULE NBH_EULER

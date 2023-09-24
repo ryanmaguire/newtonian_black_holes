@@ -23,7 +23,7 @@
 !   Author: Ryan Maguire                                                       !
 !   Date:   2023/09/20                                                         !
 !------------------------------------------------------------------------------!
-MODULE SETUP
+MODULE NBH_SETUP
     IMPLICIT NONE
 
     ! Radius of the black hole, and the square of this value.
@@ -99,7 +99,7 @@ MODULE SETUP
     !       Use the inverse square law. A = -P / ||P||^3 = -P_hat / ||P||^2.   !
     !--------------------------------------------------------------------------!
     FUNCTION GRAVITY(P)
-        USE EUCLID
+        USE NBH_EUCLID
         IMPLICIT NONE
         REAL, INTENT(IN) :: P(3)
         REAL :: GRAVITY(3)
@@ -129,7 +129,7 @@ MODULE SETUP
     !       black hole. Return false otherwise (don't halt).                   !
     !--------------------------------------------------------------------------!
     FUNCTION HALT(P)
-        USE EUCLID
+        USE NBH_EUCLID
         IMPLICIT NONE
         REAL, INTENT(IN) :: P(3)
         LOGICAL :: HALT
@@ -147,4 +147,4 @@ MODULE SETUP
             HALT = .FALSE.
         END IF
     END FUNCTION HALT
-END MODULE SETUP
+END MODULE NBH_SETUP

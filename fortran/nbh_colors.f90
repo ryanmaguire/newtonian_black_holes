@@ -23,7 +23,7 @@
 !   Author: Ryan Maguire                                                       !
 !   Date:   2023/09/20                                                         !
 !------------------------------------------------------------------------------!
-MODULE COLORS
+MODULE NBH_COLORS
     IMPLICIT NONE
 
     ! Common constant colors. Used for drawing the black hole and detector.
@@ -74,8 +74,8 @@ MODULE COLORS
     !           A checker-board pattern as a function or P.                    !
     !--------------------------------------------------------------------------!
     FUNCTION CHECKER_BOARD(P)
-        USE SETUP
-        USE EUCLID
+        USE NBH_SETUP
+        USE NBH_EUCLID
         IMPLICIT NONE
         REAL, INTENT(IN) :: P(3)
         INTEGER :: CHECKER_BOARD(3)
@@ -107,4 +107,4 @@ MODULE COLORS
             END IF
         END IF
     END FUNCTION CHECKER_BOARD
-END MODULE COLORS
+END MODULE NBH_COLORS

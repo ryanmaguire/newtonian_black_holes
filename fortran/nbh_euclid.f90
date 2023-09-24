@@ -23,7 +23,7 @@
 !   Author: Ryan Maguire                                                       !
 !   Date:   2023/09/20                                                         !
 !------------------------------------------------------------------------------!
-MODULE EUCLID
+MODULE NBH_EUCLID
     IMPLICIT NONE
     CONTAINS
 
@@ -118,4 +118,4 @@ MODULE EUCLID
         ! Appeal to the Pythagorean formula for the xy-component of V.
         RHO_SQUARED = V(1)**2 + V(2)**2
     END FUNCTION RHO_SQUARED
-END MODULE EUCLID
+END MODULE NBH_EUCLID
