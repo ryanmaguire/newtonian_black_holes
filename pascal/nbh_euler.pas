@@ -67,7 +67,7 @@ BEGIN
     BEGIN
 
         (*  If the stopping condition is satisfied abort the computation.     *)
-        IF (Stop(U[0])) THEN BREAK;
+        IF (Stop(U)) THEN BREAK;
 
         (*  We are solving P''(t) = A(P(t)). This is done numerically in two  *
          *  steps using Euler's method. First, V'(t) = A, and then P'(t) = V. *)

@@ -17,19 +17,62 @@
  *  along with newtonian_black_holes.  If not, see                            *
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************)
-UNIT nbh_FunctionTypes;
+UNIT nbh_Setup;
 
 INTERFACE
 
 USES nbh_Vec3, nbh_Vec6;
 
-TYPE
-    (*  Functions describing equations of motion via Newton's Second Law.     *)
-    Acceleration = Function(const P: Vec3) : Vec3;
+CONST
+    XSIZE: Integer = 1024;
+    YSIZE: Integer = 1024;
+    Z_SRC: Real = -10.0;
+    Z_DETECTOR: Real = 10.0;
+    Z_DETECTOR_SQ: Real = 100.0;
+    START: Real = -10.0;
+    FINISH: Real = 10.0;
+    BLACK_HOLE_RADIUS: Real = 1.0;
+    BLACK_HOLE_RADIUS_SQ: Real = 1.0;
+    PX_FACTOR: Real = 0.019550342130987292;
+    PY_FACTOR: Real = 0.019550342130987292;
 
-    (*  Halting conditions for when to terminate various numerical methods.   *)
-    Stopper = Function(const U: Vec6) : Boolean;
+Function PixelToPoint(const X, Y: Integer) : Vec3;
+Function Gravity(const P: Vec3) : Vec3;
+Function Stop(const U: Vec6) : Boolean;
 
 IMPLEMENTATION
-    (*  Nothing to implement, simply provides the function types.             *)
+
+Function PixelToPoint(const X, Y: Integer) : Vec3;
+VAR
+    XPT, YPT: Real;
+BEGIN
+    XPT := START + PX_FACTOR*X;
+    YPT := START + PY_FACTOR*Y;
+    PixelToPoint := Vec3Rect(XPT, YPT, Z_SRC);
+END;
+
+Function Gravity(const P: Vec3) : Vec3;
+VAR
+    Factor, Norm, NormSq: Real;
+BEGIN
+    Norm := Vec3Norm(P);
+    NormSq := Norm*Norm;
+    Factor := -1.0 / (Norm * NormSq);
+    Gravity := Vec3Scale(Factor, P);
+END;
+
+Function Stop(const U: Vec6) : Boolean;
+VAR
+    P: Vec3;
+BEGIN
+    P := U[0];
+
+    IF (P[2] >= Z_DETECTOR) THEN
+        Stop := True
+    ELSE IF (Vec3NormSq(P) <= BLACK_HOLE_RADIUS_SQ) THEN
+        Stop := True
+    ELSE
+        Stop := False;
+END;
+
 END.
