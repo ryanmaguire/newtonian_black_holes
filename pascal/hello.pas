@@ -1,12 +1,18 @@
 PROGRAM Hello;
 USES
-    nbh_Vec3;
+    nbh_Vec3,
+    nbh_Vec6;
 
 VAR
-    V : Vec3;
+    P, V: Vec3;
+    U: Vec6;
+    R: Real;
 
 BEGIN
-    V := Vec3Rect(1, 2, 3);
-    Vec3Print(V);
+    P := Vec3Rect(1.0, 0.0, 1.0);
+    V := Vec3Rect(1.0, 2.0, 3.0);
+    U := Vec6FromVectors(P, V);
+    R := Vec6Norm(U);
     WriteLn('Hello, World!');
+    WriteLn('The Norm is: ', R);
 END.
