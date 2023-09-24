@@ -118,4 +118,130 @@ MODULE NBH_EUCLID
         ! Appeal to the Pythagorean formula for the xy-component of V.
         RHO_SQUARED = V(1)**2 + V(2)**2
     END FUNCTION RHO_SQUARED
+
+    !--------------------------------------------------------------------------!
+    !   Function:                                                              !
+    !       DOT:                                                               !
+    !   Purpose:                                                               !
+    !       Computes the dot product of two vectors in R^3.                    !
+    !   Arguments:                                                             !
+    !       V (REAL(3)):                                                       !
+    !           A three-dimensional vector.                                    !
+    !       W (REAL(3)):                                                       !
+    !           Another three-dimensional vector.                              !
+    !   Outputs:                                                               !
+    !       V_DOT_W (REAL):                                                    !
+    !           The Euclidean dot product of V with W.                         !
+    !   Method:                                                                !
+    !       Sum the product of the components of V and W and return.           !
+    !--------------------------------------------------------------------------!
+    FUNCTION DOT(V, W)
+        IMPLICIT NONE
+        REAL, INTENT(IN) :: V(3)
+        REAL, INTENT(IN) :: W(3)
+        REAL :: DOT
+
+        ! Sum the product of the individual components to conclude.
+        DOT = SUM(V*W)
+    END FUNCTION DOT
+
+    !--------------------------------------------------------------------------!
+    !   Function:                                                              !
+    !       CROSS:                                                             !
+    !   Purpose:                                                               !
+    !       Computes the cross product of two vectors in R^3.                  !
+    !   Arguments:                                                             !
+    !       V (REAL(3)):                                                       !
+    !           A three-dimensional vector.                                    !
+    !       W (REAL(3)):                                                       !
+    !           Another three-dimensional vector.                              !
+    !   Outputs:                                                               !
+    !       V_CROSS_W (REAL(3):                                                !
+    !           The Euclidean cross product of V with W.                       !
+    !--------------------------------------------------------------------------!
+    FUNCTION CROSS(V, W)
+        IMPLICIT NONE
+        REAL, INTENT(IN) :: V(3)
+        REAL, INTENT(IN) :: W(3)
+        REAL :: CROSS(3)
+
+        ! Use the determinant of the cross-product matrix to compute.
+        CROSS(1) = V(2)*W(3) - V(3)*W(2)
+        CROSS(2) = V(3)*W(1) - V(1)*W(3)
+        CROSS(3) = V(1)*W(2) - V(2)*W(1)
+    END FUNCTION CROSS
+
+    !--------------------------------------------------------------------------!
+    !   Function:                                                              !
+    !       NORMALIZE:                                                         !
+    !   Purpose:                                                               !
+    !       Normalizes a vector to unit magnitude.                             !
+    !   Arguments:                                                             !
+    !       V (REAL(3)):                                                       !
+    !           A three-dimensional vector.                                    !
+    !   Outputs:                                                               !
+    !       V_HAT (REAL(3):                                                    !
+    !           The unit vector pointing in the direction of V.                !
+    !--------------------------------------------------------------------------!
+    FUNCTION NORMALIZE(V)
+        IMPLICIT NONE
+        REAL, INTENT(IN) :: V(3)
+        REAL :: NORM_V
+        REAL :: NORM_V_SQ
+        REAL :: FACTOR
+        REAL :: NORMALIZE(3)
+
+        ! The normalization is V / ||V||. We should check that ||V|| is
+        ! non-zero first. Avoid a wasteful sqrt call, compute ||V||^2.
+        NORM_V_SQ = NORM_SQUARED(V)
+
+        ! If the input is the zero vector, set the output to be zero as well.
+        IF (NORM_V_SQ .EQ. 0.0) THEN
+            NORMALIZE = V
+
+        ! Otherwise compute V / ||V|| to normalize the input.
+        ELSE
+            ! We've already computed ||V||^2. Use this to compute ||V||.
+            NORM_V = SQRT(NORM_V_SQ)
+
+            ! The scale factor is the reciprocal of the norm.
+            FACTOR = 1.0 / NORM_V
+            NORMALIZE = FACTOR * V
+        END IF
+    END FUNCTION NORMALIZE
+
+    !--------------------------------------------------------------------------!
+    !   Subroutine:                                                             !
+    !       NORMALIZE_SELF:                                                    !
+    !   Purpose:                                                               !
+    !       Normalizes a vector to unit magnitude.                             !
+    !   Arguments:                                                             !
+    !       V (REAL(3)):                                                       !
+    !           A three-dimensional vector.                                    !
+    !--------------------------------------------------------------------------!
+    SUBROUTINE NORMALIZE_SELF(V)
+        IMPLICIT NONE
+        REAL, INTENT(INOUT) :: V(3)
+        REAL :: NORM_V
+        REAL :: NORM_V_SQ
+        REAL :: FACTOR
+
+        ! The normalization is V / ||V||. We should check that ||V|| is
+        ! non-zero first. Avoid a wasteful sqrt call, compute ||V||^2.
+        NORM_V_SQ = NORM_SQUARED(V)
+
+        ! If the input is the zero vector, do nothing.
+        IF (NORM_V_SQ .EQ. 0.0) THEN
+            RETURN
+
+        ! Otherwise compute V / ||V|| to normalize the input.
+        ELSE
+            ! We've already computed ||V||^2. Use this to compute ||V||.
+            NORM_V = SQRT(NORM_V_SQ)
+
+            ! The scale factor is the reciprocal of the norm.
+            FACTOR = 1.0 / NORM_V
+            V = FACTOR * V
+        END IF
+    END SUBROUTINE NORMALIZE_SELF
 END MODULE NBH_EUCLID
