@@ -27,11 +27,14 @@ MODULE NBH_COLORS
     IMPLICIT NONE
 
     ! Common constant colors. Used for drawing the black hole and detector.
-    INTEGER :: BLACK(3) = (/ 0,     0,   0 /)
-    INTEGER :: WHITE(3) = (/ 255, 255, 255 /)
-    INTEGER :: RED(3)   = (/ 255,   0,   0 /)
-    INTEGER :: GREEN(3) = (/   0, 255,   0 /)
-    INTEGER :: BLUE(3)  = (/   0,   0, 255 /)
+    INTEGER :: BLACK(3)   = (/ 0,     0,   0 /)
+    INTEGER :: WHITE(3)   = (/ 255, 255, 255 /)
+    INTEGER :: RED(3)     = (/ 255,   0,   0 /)
+    INTEGER :: GREEN(3)   = (/   0, 255,   0 /)
+    INTEGER :: BLUE(3)    = (/   0,   0, 255 /)
+    INTEGER :: CYAN(3)    = (/   0, 255, 255 /)
+    INTEGER :: YELLOW(3)  = (/ 255, 255,   0 /)
+    INTEGER :: MAGENTA(3) = (/ 255,   0, 255 /)
 
     CONTAINS
 
@@ -227,6 +230,7 @@ MODULE NBH_COLORS
         REAL, INTENT(IN) :: P(3)
         REAL, INTENT(IN) :: COLOR_FACTOR
         INTEGER :: CX, CY, IND
+        INTEGER :: COLOR(3)
         INTEGER :: SCALED_CHECKER_BOARD_FOUR(3)
 
         ! If the photon didn't make it to the detector, color the point black.
@@ -235,20 +239,50 @@ MODULE NBH_COLORS
 
         ! Otherwise create a checker-board pattern from the xy components.
         ELSE
-            CX = INT(CEILING(P(1)))
-            CY = INT(CEILING(P(2)))
+            CX = IAND(INT(CEILING(P(1))), 1)
+            CY = IAND(INT(CEILING(P(2))), 1)
             IND = CX + 2*CY
 
             SELECT CASE (IND)
                 CASE (0)
-                    SCALED_CHECKER_BOARD_FOUR = SCALE_COLOR(COLOR_FACTOR, WHITE)
+                    COLOR = WHITE
                 CASE (1)
-                    SCALED_CHECKER_BOARD_FOUR = SCALE_COLOR(COLOR_FACTOR, RED)
+                    COLOR = CYAN
                 CASE (2)
-                    SCALED_CHECKER_BOARD_FOUR = SCALE_COLOR(COLOR_FACTOR, BLUE)
+                    COLOR = BLUE
                 CASE DEFAULT
-                    SCALED_CHECKER_BOARD_FOUR = SCALE_COLOR(COLOR_FACTOR, GREEN)
+                    COLOR = MAGENTA
             END SELECT
+
+            ! Scale the chosen color by the color factor to finish.
+            SCALED_CHECKER_BOARD_FOUR = SCALE_COLOR(COLOR_FACTOR, COLOR)
         END IF
     END FUNCTION SCALED_CHECKER_BOARD_FOUR
+
+    !--------------------------------------------------------------------------!
+    !   Function:                                                              !
+    !       CHECKER_BOARD_FOUR                                                 !
+    !   Purpose:                                                               !
+    !       Creates a checker-board pattern for the detector.                  !
+    !   Arguments:                                                             !
+    !       P (REAL(3)):                                                       !
+    !           A point on the detector.                                       !
+    !   Outputs:                                                               !
+    !       CHECKER_BOARD_FOUR (INTEGER(3)):                                   !
+    !           A checker-board pattern as a function or P.                    !
+    !--------------------------------------------------------------------------!
+    FUNCTION CHECKER_BOARD_FOUR(P)
+        USE NBH_SETUP
+        USE NBH_EUCLID
+        IMPLICIT NONE
+        REAL, INTENT(IN) :: P(3)
+        REAL :: COLOR_FACTOR
+        INTEGER :: CHECKER_BOARD_FOUR(3)
+
+        ! Scale factor for darkening the detector for points far away.
+        COLOR_FACTOR = Z_DETECTOR_SQUARED / NORM_SQUARED(P)
+
+        ! Use the general checker board function to get the color.
+        CHECKER_BOARD_FOUR = SCALED_CHECKER_BOARD_FOUR(COLOR_FACTOR, P)
+    END FUNCTION CHECKER_BOARD_FOUR
 END MODULE NBH_COLORS
