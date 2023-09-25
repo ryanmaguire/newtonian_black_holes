@@ -211,7 +211,7 @@ MODULE NBH_EUCLID
     END FUNCTION NORMALIZE
 
     !--------------------------------------------------------------------------!
-    !   Subroutine:                                                             !
+    !   Subroutine:                                                            !
     !       NORMALIZE_SELF:                                                    !
     !   Purpose:                                                               !
     !       Normalizes a vector to unit magnitude.                             !
@@ -244,4 +244,63 @@ MODULE NBH_EUCLID
             V = FACTOR * V
         END IF
     END SUBROUTINE NORMALIZE_SELF
+
+    !--------------------------------------------------------------------------!
+    !   Function:                                                              !
+    !       COMPONENT:                                                         !
+    !   Purpose:                                                               !
+    !       Computes the projection of one vector in R^3 along another.        !
+    !   Arguments:                                                             !
+    !       V (REAL(3)):                                                       !
+    !           A three-dimensional vector.                                    !
+    !       W (REAL(3)):                                                       !
+    !           Another 3D vector, the vector V is projected on to.            !
+    !   Output:                                                                !
+    !       COMPONENT (REAL(3)):                                               !
+    !           The projection of V along the vector W.                        !
+    !   Method:                                                                !
+    !       The projection formula is proj_{W}(V) = (V . W_hat) * W_hat, where !
+    !       W_hat is the unit vector in the W direction: W_hat = W / ||W||.    !
+    !       We can rearrange this formula to get ((V . W) / ||W||^2) * W. This !
+    !       final formula is used to compute the component of V along W.       !
+    !--------------------------------------------------------------------------!
+    FUNCTION COMPONENT(V, W)
+        REAL, INTENT(IN) :: V(3)
+        REAL, INTENT(IN) :: W(3)
+        REAL :: FACTOR
+        REAL :: COMPONENT(3)
+
+        ! The projection factor is given by the "normalized" dot product.
+        FACTOR = DOT(V, W) / NORM_SQUARED(W)
+        COMPONENT = FACTOR * W
+    END FUNCTION COMPONENT
+
+    !--------------------------------------------------------------------------!
+    !   Function:                                                              !
+    !       ORTHOGONAL_PART:                                                   !
+    !   Purpose:                                                               !
+    !       Computes the orthogonal projection of a 3D vector along another.   !
+    !   Arguments:                                                             !
+    !       V (REAL(3)):                                                       !
+    !           A three-dimensional vector.                                    !
+    !       W (REAL(3)):                                                       !
+    !           Another 3D vector.                                             !
+    !   Output:                                                                !
+    !       ORTHOGONAL_PART (REAL(3)):                                         !
+    !           The orthogonal projection of V along the vector W.             !
+    !   Method:                                                                !
+    !       Subtract the component proj_{W}(V) from V.                         !
+    !--------------------------------------------------------------------------!
+    FUNCTION ORTHOGONAL_PART(V, W)
+        REAL, INTENT(IN) :: V(3)
+        REAL, INTENT(IN) :: W(3)
+        REAL :: PROJ_W_OF_V(3)
+        REAL :: ORTHOGONAL_PART(3)
+
+        ! Compute the part of V that is parallel to W.
+        PROJ_W_OF_V = COMPONENT(V, W)
+
+        ! The orthogonal component is V minus the parallel component.
+        ORTHOGONAL_PART = V - PROJ_W_OF_V
+    END FUNCTION ORTHOGONAL_PART
 END MODULE NBH_EUCLID
