@@ -23,54 +23,103 @@
 !   Author: Ryan Maguire                                                       !
 !   Date:   2023/09/20                                                         !
 !------------------------------------------------------------------------------!
-PROGRAM MAIN
-    USE NBH_COLORS
-    USE NBH_SETUP
-    USE NBH_EULER
+MODULE NBH
     IMPLICIT NONE
-    REAL :: P(3)
-    REAL :: V(3)
-    REAL :: PROG_FACTOR
-    INTEGER :: X, Y
-    INTEGER :: C(3)
+    CONTAINS
 
-    ! Factor for printing a status update.
-    PROG_FACTOR = 100.0 / REAL(YSIZE)
+    !--------------------------------------------------------------------------!
+    !   Subroutine:                                                            !
+    !       RUN                                                                !
+    !   Purpose:                                                               !
+    !       Performs all of the raytracing for rendering a black hole.         !
+    !   Arguments:                                                             !
+    !       ACCELERATION (FUNCTION):                                           !
+    !           A vector-valued function describing the equation of motion.    !
+    !       STOPPER (FUNCTION):                                                !
+    !           Stopping condition for when to halt the numerical ODE method.  !
+    !       COLORER (FUNCTION):                                                !
+    !           Coloring function for coloring the detector.                   !
+    !       RAYTRACER (SUBROUTINE):                                            !
+    !           Subroutine that determines which numerical ODE solver to use.  !
+    !--------------------------------------------------------------------------!
+    SUBROUTINE RUN(ACCELERATION, STOPPER, COLORER, RAYTRACER)
+        USE NBH_SETUP
+        USE NBH_COLORS
+        IMPLICIT NONE
+        REAL :: P(3)
+        REAL :: V(3)
+        REAL :: PROG_FACTOR
+        INTEGER :: X, Y
+        INTEGER :: C(3)
+        INTEGER :: PPM
 
-    ! Open a file for the output PPM.
-    OPEN(1, FILE = "newtonian_black_holes.ppm")
+        ! Interface for the acceleration function. 3D vector in, 3D vector out.
+        INTERFACE
+            FUNCTION ACCELERATION(P)
+                REAL, INTENT(IN) :: P(3)
+                REAL :: ACCELERATION(3)
+            END FUNCTION ACCELERATION
+        END INTERFACE
 
-    ! No idea how to write binary data in Fortran. Using text mode for now.
-    WRITE(1, FMT = "(A2)") "P3"
-    WRITE(1, FMT = "(I4,I5)") XSIZE, YSIZE
-    WRITE(1, FMT = "(I3)") 255
+        ! Interface for the stopping condition. Outputs a Boolean.
+        INTERFACE
+            FUNCTION STOPPER(P)
+                REAL, INTENT(IN) :: P(3)
+                LOGICAL :: STOPPER
+            END FUNCTION STOPPER
+        END INTERFACE
 
-    ! Loop over the Y coordinates of the pixels.
-    DO Y = 1, XSIZE
-        ! And loop over the X coordinates of the pixels.
-        DO X = 1, YSIZE
-            ! Get the point in space corresponding to this pixel.
-            P = PIXEL_TO_POINT(X, Y)
+        ! Interface for the coloring function. Vector in, color out.
+        INTERFACE
+            FUNCTION COLORER(P)
+                REAL, INTENT(IN) :: P(3)
+                INTEGER :: COLORER(3)
+            END FUNCTION COLORER
+        END INTERFACE
 
-            ! The initial velocity is constant across the detector.
-            V = INITIAL_VELOCITY
+        ! File number for the PPM file.
+        PPM = 1
 
-            ! Raytrace where the light came from.
-            CALL PATH(P, V, GRAVITY, HALT)
+        ! Factor for printing a status update.
+        PROG_FACTOR = 100.0 / REAL(YSIZE)
 
-            ! Get the color corresponding to the point.
-            C = CHECKER_BOARD(P)
+        ! Open a file for the output PPM.
+        OPEN(PPM, FILE = "newtonian_black_holes.ppm")
 
-            ! Add this color to the PPM in plain-text format.
-            WRITE(1, FMT = "(I3,I4,I4)") C
+        ! No idea how to write binary data in Fortran. Using text mode for now.
+        WRITE(PPM, FMT = "(A2)") "P3"
+        WRITE(PPM, FMT = "(I4,I5)") XSIZE, YSIZE
+        WRITE(PPM, FMT = "(I3)") 255
+
+        ! Loop over the Y coordinates of the pixels.
+        DO Y = 1, XSIZE
+
+            ! And loop over the X coordinates of the pixels.
+            DO X = 1, YSIZE
+
+                ! Get the point in space corresponding to this pixel.
+                P = PIXEL_TO_POINT(X, Y)
+
+                ! The initial velocity is constant across the detector.
+                V = INITIAL_VELOCITY
+
+                ! Raytrace where the light came from.
+                CALL RAYTRACER(P, V, ACCELERATION, STOPPER)
+
+                ! Get the color corresponding to the point.
+                C = COLORER(P)
+
+                ! Add this color to the PPM file.
+                CALL WRITE_COLOR(PPM, C)
+            END DO
+
+            ! Print a status update every now-and-again.
+            IF (MOD(Y, 20) .EQ. 0) THEN
+                PRINT "(A,F5.2,A)", "Progress: ", REAL(Y) * PROG_FACTOR, "%"
+            END IF
         END DO
 
-        ! Print a status update every now-and-again.
-        IF (MOD(Y, 20) .EQ. 0) THEN
-            PRINT "(A,F5.2,A)", "Progress: ", REAL(Y) * PROG_FACTOR, "%"
-        END IF
-    END DO
-
-    ! Close the file and exit the program.
-    CLOSE(1)
-END PROGRAM MAIN
+        ! Close the file and exit the program.
+        CLOSE(PPM)
+    END SUBROUTINE RUN
+END MODULE NBH
