@@ -536,5 +536,59 @@ nbh_color_gradient_checker_board(const struct nbh_vec6 *u)
 }
 /*  End of nbh_color_gradient_checker_board.                                  */
 
+/******************************************************************************
+ *  Function:                                                                 *
+ *      nbh_checker_board_sphere                                              *
+ *  Purpose:                                                                  *
+ *      Creates a checker-board pattern on the detector, and colors the black *
+ *      hole with a checker-board pattern as well.                            *
+ *  Arguments:                                                                *
+ *      u (const struct nbh_vec6 *):                                          *
+ *          The position and velocity of the particle as it hit the detector. *
+ *  Outputs:                                                                  *
+ *      c (struct nbh_color):                                                 *
+ *          The color given on the detector or black hole.                    *
+ ******************************************************************************/
+NBH_INLINE struct nbh_color
+nbh_checker_board_sphere(const struct nbh_vec6 *u)
+{
+    /*  Factor for darkening the checker board.                               */
+    const double norm_factor = nbh_setup_z_detector_sq / nbh_vec3_normsq(&u->p);
+    const double cfact = 0.5 * (norm_factor + 1.0);
+
+    /*  Special case. The photon didn't reach the detector.                   */
+    if (u->p.z > nbh_setup_z_detector)
+    {
+        /*  If it didn't hit the black hole, color it black.                  */
+        if (nbh_vec3_normsq(&u->p) > nbh_setup_black_hole_radius_sq)
+            return nbh_black;
+
+        /*  Otherwise create a checker-board pattern on the sphere.           */
+        else
+        {
+            /*  "In" is the z axis, "up" is the y axis, and "right" is the    *
+             *  x axis. Create spherical coordinates from this.               */
+            const double rho = sqrt(u->p.x*u->p.x + u->p.z*u->p.z);
+            const double phi = atan2(u->p.z, u->p.x) + NBH_PI;
+            const double theta = NBH_HALF_PI - atan2(u->p.y, rho);
+            const double f1 = ceil(10.0 * phi / NBH_PI);
+            const double f2 = ceil(10.0 * theta / NBH_PI);
+
+            /*  Create a checker board on the sphere.                         */
+            if ((unsigned)(f1 + f2) & 1U)
+                return nbh_blue;
+
+            return nbh_green;
+        }
+    }
+
+    /*  Otherwise use a bit-wise trick to color the plane.                    */
+    else if ((unsigned)(ceil(u->p.x) + ceil(u->p.y)) & 1U)
+        return nbh_color_scale(&nbh_white, cfact);
+
+    return nbh_color_scale(&nbh_red, cfact);
+}
+/*  End of nbh_checker_board_sphere.                                          */
+
 #endif
 /*  End of include guard.                                                     */
