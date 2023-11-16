@@ -30,7 +30,7 @@ import Foundation
 struct Color {
     var red, green, blue: Int32
 
-    func writeToFile(file: Optional<UnsafeMutablePointer<_IO_FILE>>) {
+    func writeToFile(file: Optional<UnsafeMutablePointer<FILE>>) {
         putc(red, file)
         putc(green, file)
         putc(blue, file)
