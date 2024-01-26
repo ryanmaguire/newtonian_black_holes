@@ -17,6 +17,13 @@
  *  along with newtonian_black_holes.  If not, see                            *
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
-module nbh;
-public import nbh.vec3;
-public import nbh.vec6;
+import std.stdio : writeln;
+import nbh;
+
+void main()
+{
+    nbh.vec3.Vec3 p = new nbh.vec3.Vec3(1, 1, 1);
+    nbh.vec3.Vec3 v = p.dup;
+    nbh.vec6.Vec6 u = new Vec6(p, v);
+    writeln(u);
+}
