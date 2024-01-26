@@ -1,9 +1,6 @@
 # Java stuff.
 .class
 
-# Prerequisites
-*.d
-
 # Object files
 *.o
 *.ko
