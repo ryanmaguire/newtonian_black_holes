@@ -17,12 +17,31 @@
  *  along with newtonian_black_holes.  If not, see                            *
  *  <https://www.gnu.org/licenses/>.                                          *
  ******************************************************************************/
-module nbh;
-public import nbh.color;
-public import nbh.euler;
-public import nbh.functions;
-public import nbh.ppm;
-public import nbh.setup;
-public import nbh.tools;
-public import nbh.vec3;
-public import nbh.vec6;
+import std.stdio : writeln;
+import nbh;
+
+void main()
+{
+    nbh.ppm.PPM ppm = new nbh.ppm.PPM("test.ppm");
+    uint x, y;
+    nbh.vec3.Vec3 vstart = new nbh.vec3.Vec3(0.0, 0.0, -1.0);
+    nbh.vec6.Vec6 u = new nbh.vec6.Vec6;
+    immutable double prog_factor = 100.0 / cast(double)nbh.setup.ysize;
+
+    for (y = 0U; y < nbh.setup.ysize; ++y)
+    {
+        for (x = 0U; x < nbh.setup.xsize; ++x)
+        {
+            u.pos = nbh.tools.pixelToPoint(x, y);
+            u.vel = vstart;
+            path(u, &nbh.tools.gravity, &nbh.tools.stop);
+            nbh.color.Color c = nbh.color.checkerBoard(u.pos);
+            c.write(ppm);
+        }
+
+        if ((y % 20U) == 0U)
+            writeln(prog_factor * cast(double)y);
+    }
+
+    ppm.close;
+}

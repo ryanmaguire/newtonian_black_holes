@@ -27,7 +27,7 @@ module nbh.vec6;
 private import nbh.vec3 : Vec3;
 
 /*  Class for working with vectors in R^3. Uses double-precision values.      */
-struct Vec6 {
+class Vec6 {
 
     private {
         /*  Using phase-space, a 6D vector is two 3D vectors.                 */
@@ -36,31 +36,42 @@ struct Vec6 {
 
     public {
 
+        this()
+        pure nothrow @safe @nogc
+        {
+            dat[0] = 0.0;
+            dat[1] = 0.0;
+            dat[2] = 0.0;
+            dat[3] = 0.0;
+            dat[4] = 0.0;
+            dat[5] = 0.0;
+        }
+
         this(const Vec3 pos, const Vec3 vel)
         pure nothrow @safe @nogc
         {
-            this.dat[0] = pos.x;
-            this.dat[1] = pos.y;
-            this.dat[2] = pos.z;
+            dat[0] = pos.x;
+            dat[1] = pos.y;
+            dat[2] = pos.z;
 
-            this.dat[3] = vel.x;
-            this.dat[4] = vel.y;
-            this.dat[5] = vel.z;
+            dat[3] = vel.x;
+            dat[4] = vel.y;
+            dat[5] = vel.z;
         }
 
         this(double px, double py, double pz, double vx, double vy, double vz)
         pure nothrow @safe @nogc
         {
-            this.dat[0] = px;
-            this.dat[1] = py;
-            this.dat[2] = pz;
+            dat[0] = px;
+            dat[1] = py;
+            dat[2] = pz;
 
-            this.dat[3] = vx;
-            this.dat[4] = vy;
-            this.dat[5] = vz;
+            dat[3] = vx;
+            dat[4] = vy;
+            dat[5] = vz;
         }
 
-        string toString()
+        override string toString()
         pure @safe const
         {
             import std.string : format;
@@ -87,96 +98,60 @@ struct Vec6 {
         double px()
         pure nothrow @safe @nogc const
         {
-            return this.dat[0];
+            return dat[0];
         }
 
         double py()
         pure nothrow @safe @nogc const
         {
-            return this.dat[1];
+            return dat[1];
         }
 
         double pz()
         pure nothrow @safe @nogc const
         {
-            return this.dat[2];
+            return dat[2];
         }
 
         double vx()
         pure nothrow @safe @nogc const
         {
-            return this.dat[3];
+            return dat[3];
         }
 
         double vy()
         pure nothrow @safe @nogc const
         {
-            return this.dat[4];
+            return dat[4];
         }
 
         double vz()
         pure nothrow @safe @nogc const
         {
-            return this.dat[5];
-        }
-
-        void px(double x)
-        pure nothrow @safe @nogc
-        {
-            this.dat[0] = x;
-        }
-
-        void py(double y)
-        pure nothrow @safe @nogc
-        {
-            this.dat[1] = y;
-        }
-
-        void pz(double z)
-        pure nothrow @safe @nogc
-        {
-            this.dat[2] = z;
-        }
-
-        void vx(double x)
-        pure nothrow @safe @nogc
-        {
-            this.dat[3] = x;
-        }
-
-        void vy(double y)
-        pure nothrow @safe @nogc
-        {
-            this.dat[4] = y;
-        }
-
-        void vz(double z)
-        pure nothrow @safe @nogc
-        {
-            this.dat[5] = z;
+            return dat[5];
         }
 
         Vec3 pos()
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            return Vec3(this.dat[0], this.dat[1], this.dat[2]);
+            return new Vec3(this.dat[0], this.dat[1], this.dat[2]);
         }
 
         Vec3 vel()
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            return Vec3(this.dat[3], this.dat[4], this.dat[5]);
+            return new Vec3(this.dat[3], this.dat[4], this.dat[5]);
         }
 
-        double dot(const Vec6 u)
+        double dot(const Vec6 v)
         pure nothrow @safe @nogc const
         {
-            return this.dat[0]*u.dat[0] +
-                   this.dat[1]*u.dat[1] +
-                   this.dat[2]*u.dat[2] +
-                   this.dat[3]*u.dat[3] +
-                   this.dat[4]*u.dat[4] +
-                   this.dat[5]*u.dat[5];
+            return this.dat[0]*v.dat[0] +
+                   this.dat[1]*v.dat[1] +
+                   this.dat[2]*v.dat[2] +
+                   this.dat[3]*v.dat[3] +
+                   this.dat[4]*v.dat[4] +
+                   this.dat[5]*v.dat[5];
         }
 
         double normSq()
@@ -193,15 +168,15 @@ struct Vec6 {
         }
 
         Vec6 opBinary(string op : "+")(const Vec6 u)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec6 sum;
-            sum.px = this.dat[0] + u.dat[0];
-            sum.py = this.dat[1] + u.dat[1];
-            sum.pz = this.dat[2] + u.dat[2];
-            sum.vx = this.dat[3] + u.dat[3];
-            sum.vy = this.dat[4] + u.dat[4];
-            sum.vz = this.dat[5] + u.dat[5];
+            Vec6 sum = new Vec6;
+            sum.dat[0] = this.dat[0] + u.dat[0];
+            sum.dat[1] = this.dat[1] + u.dat[1];
+            sum.dat[2] = this.dat[2] + u.dat[2];
+            sum.dat[3] = this.dat[3] + u.dat[3];
+            sum.dat[4] = this.dat[4] + u.dat[4];
+            sum.dat[5] = this.dat[5] + u.dat[5];
             return sum;
         }
 
@@ -217,15 +192,15 @@ struct Vec6 {
         }
 
         Vec6 opBinary(string op : "-")(const Vec6 u)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec6 diff;
-            diff.px = this.dat[0] - u.dat[0];
-            diff.py = this.dat[1] - u.dat[1];
-            diff.pz = this.dat[2] - u.dat[2];
-            diff.vx = this.dat[3] - u.dat[3];
-            diff.vy = this.dat[4] - u.dat[4];
-            diff.vz = this.dat[5] - u.dat[5];
+            Vec6 diff = new Vec6;
+            diff.dat[0] = this.dat[0] - u.dat[0];
+            diff.dat[1] = this.dat[1] - u.dat[1];
+            diff.dat[2] = this.dat[2] - u.dat[2];
+            diff.dat[3] = this.dat[3] - u.dat[3];
+            diff.dat[4] = this.dat[4] - u.dat[4];
+            diff.dat[5] = this.dat[5] - u.dat[5];
             return diff;
         }
 
@@ -241,28 +216,28 @@ struct Vec6 {
         }
 
         Vec6 opBinary(string op : "*")(double rhs)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec6 prod;
-            prod.px = this.dat[0] * rhs;
-            prod.py = this.dat[1] * rhs;
-            prod.pz = this.dat[2] * rhs;
-            prod.vx = this.dat[3] * rhs;
-            prod.vy = this.dat[4] * rhs;
-            prod.vz = this.dat[5] * rhs;
+            Vec6 prod = new Vec6;
+            prod.dat[0] = this.dat[0] * rhs;
+            prod.dat[1] = this.dat[1] * rhs;
+            prod.dat[2] = this.dat[2] * rhs;
+            prod.dat[3] = this.dat[3] * rhs;
+            prod.dat[4] = this.dat[4] * rhs;
+            prod.dat[5] = this.dat[5] * rhs;
             return prod;
         }
 
         Vec6 opBinaryRight(string op : "*")(double lhs)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec6 prod;
-            prod.px = lhs * this.dat[0];
-            prod.py = lhs * this.dat[1];
-            prod.pz = lhs * this.dat[2];
-            prod.vx = lhs * this.dat[3];
-            prod.vy = lhs * this.dat[4];
-            prod.vz = lhs * this.dat[5];
+            Vec6 prod = new Vec6;
+            prod.dat[0] = lhs * this.dat[0];
+            prod.dat[1] = lhs * this.dat[1];
+            prod.dat[2] = lhs * this.dat[2];
+            prod.dat[3] = lhs * this.dat[3];
+            prod.dat[4] = lhs * this.dat[4];
+            prod.dat[5] = lhs * this.dat[5];
             return prod;
         }
 
@@ -278,16 +253,16 @@ struct Vec6 {
         }
 
         Vec6 opBinary(string op : "/")(double rhs)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec6 quot;
+            Vec6 quot = new Vec6;
             immutable double rcpr = 1.0 / rhs;
-            quot.px = this.dat[0] * rcpr;
-            quot.py = this.dat[1] * rcpr;
-            quot.pz = this.dat[2] * rcpr;
-            quot.vx = this.dat[3] * rcpr;
-            quot.vy = this.dat[4] * rcpr;
-            quot.vz = this.dat[5] * rcpr;
+            quot.dat[0] = this.dat[0] * rcpr;
+            quot.dat[1] = this.dat[1] * rcpr;
+            quot.dat[2] = this.dat[2] * rcpr;
+            quot.dat[3] = this.dat[3] * rcpr;
+            quot.dat[4] = this.dat[4] * rcpr;
+            quot.dat[5] = this.dat[5] * rcpr;
             return quot;
         }
 
@@ -307,9 +282,9 @@ struct Vec6 {
 
 pure nothrow @safe unittest
 {
-    Vec3 p = Vec3(1, 2, 3);
-    Vec3 v = Vec3(4, 5, 6);
-    Vec6 u = Vec6(p, v);
+    Vec3 p = new Vec3(1, 2, 3);
+    Vec3 v = new Vec3(4, 5, 6);
+    Vec6 u = new Vec6(p, v);
     immutable double nsq = u.normSq;
     immutable double ans = 91.0;
     assert(nsq == ans);
@@ -318,9 +293,9 @@ pure nothrow @safe unittest
 pure nothrow @safe unittest
 {
     import std.math : fabs;
-    Vec3 p = Vec3(1, 2, 3);
-    Vec3 v = Vec3(4, 5, 6);
-    Vec6 u = Vec6(p, v);
+    Vec3 p = new Vec3(1, 2, 3);
+    Vec3 v = new Vec3(4, 5, 6);
+    Vec6 u = new Vec6(p, v);
     immutable double nrm = u.norm;
     immutable double ans = 9.539392014169456;
     immutable double err = fabs((ans - nrm) / ans);
@@ -330,9 +305,9 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec3 p = Vec3(1, 2, 3);
-    Vec3 v = Vec3(4, 5, 6);
-    Vec6 u = Vec6(p, v);
+    Vec3 p = new Vec3(1, 2, 3);
+    Vec3 v = new Vec3(4, 5, 6);
+    Vec6 u = new Vec6(p, v);
     assert(u.px == p.x);
     assert(u.py == p.y);
     assert(u.pz == p.z);
@@ -343,9 +318,9 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec3 p = Vec3(1, 2, 3);
-    Vec3 v = Vec3(4, 5, 6);
-    Vec6 u = Vec6(p, v);
+    Vec3 p = new Vec3(1, 2, 3);
+    Vec3 v = new Vec3(4, 5, 6);
+    Vec6 u = new Vec6(p, v);
     Vec3 pos = u.pos;
     Vec3 vel = u.vel;
     assert(pos.x == p.x);
@@ -358,8 +333,8 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 u0 = Vec6(1, 2, 3, 4, 5, 6);
-    Vec6 u1 = Vec6(2, 3, 4, 5, 6, 7);
+    Vec6 u0 = new Vec6(1, 2, 3, 4, 5, 6);
+    Vec6 u1 = new Vec6(2, 3, 4, 5, 6, 7);
     Vec6 sum = u0 + u1;
     assert(sum.px == 3);
     assert(sum.py == 5);
@@ -371,8 +346,8 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 u0 = Vec6(1, 2, 3, 4, 5, 6);
-    Vec6 u1 = Vec6(2, 3, 4, 5, 6, 7);
+    Vec6 u0 = new Vec6(1, 2, 3, 4, 5, 6);
+    Vec6 u1 = new Vec6(2, 3, 4, 5, 6, 7);
     Vec6 diff = u1 - u0;
     assert(diff.px == 1);
     assert(diff.py == 1);
@@ -384,7 +359,7 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 u = Vec6(1, 2, 3, 4, 5, 6);
+    Vec6 u = new Vec6(1, 2, 3, 4, 5, 6);
     Vec6 prod = 2.0 * u;
     assert(prod.px == 2);
     assert(prod.py == 4);
@@ -396,7 +371,7 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 u = Vec6(1, 2, 3, 4, 5, 6);
+    Vec6 u = new Vec6(1, 2, 3, 4, 5, 6);
     Vec6 prod = u * 2.0;
     assert(prod.px == 2);
     assert(prod.py == 4);
@@ -408,8 +383,8 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 u0 = Vec6(1, 2, 3, 4, 5, 6);
-    Vec6 u1 = Vec6(2, 3, 4, 5, 6, 7);
+    Vec6 u0 = new Vec6(1, 2, 3, 4, 5, 6);
+    Vec6 u1 = new Vec6(2, 3, 4, 5, 6, 7);
     u0 += u1;
     assert(u0.px == 3);
     assert(u0.py == 5);
@@ -421,8 +396,8 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 u0 = Vec6(1, 2, 3, 4, 5, 6);
-    Vec6 u1 = Vec6(2, 3, 4, 5, 6, 7);
+    Vec6 u0 = new Vec6(1, 2, 3, 4, 5, 6);
+    Vec6 u1 = new Vec6(2, 3, 4, 5, 6, 7);
     u1 -= u0;
     assert(u1.px == 1);
     assert(u1.py == 1);
@@ -434,7 +409,7 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 prod = Vec6(1, 2, 3, 4, 5, 6);
+    Vec6 prod = new Vec6(1, 2, 3, 4, 5, 6);
     prod *= 2.0;
     assert(prod.px == 2);
     assert(prod.py == 4);
@@ -446,7 +421,7 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 u = Vec6(2, 4, 6, 8, 10, 12);
+    Vec6 u = new Vec6(2, 4, 6, 8, 10, 12);
     Vec6 quot = u / 2.0;
     assert(quot.px == 1);
     assert(quot.py == 2);
@@ -458,7 +433,7 @@ pure nothrow @safe unittest
 
 pure nothrow @safe unittest
 {
-    Vec6 quot = Vec6(2, 4, 6, 8, 10, 12);
+    Vec6 quot = new Vec6(2, 4, 6, 8, 10, 12);
     quot /= 2.0;
     assert(quot.px == 1);
     assert(quot.py == 2);

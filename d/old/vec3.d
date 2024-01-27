@@ -26,7 +26,7 @@
 module nbh.vec3;
 
 /*  Class for working with vectors in R^3. Uses double-precision values.      */
-struct Vec3 {
+class Vec3 {
 
     private {
         /*  Following several C and C++ libraries, use a contiguous array for *
@@ -36,6 +36,14 @@ struct Vec3 {
 
     public {
 
+        this()
+        pure nothrow @safe @nogc
+        {
+            this.dat[0] = 0.0;
+            this.dat[1] = 0.0;
+            this.dat[2] = 0.0;
+        }
+
         this(double x, double y, double z)
         pure nothrow @safe @nogc
         {
@@ -44,7 +52,7 @@ struct Vec3 {
             this.dat[2] = z;
         }
 
-        string toString()
+        override string toString()
         pure @safe const
         {
             import std.string : format;
@@ -69,24 +77,6 @@ struct Vec3 {
             return this.dat[2];
         }
 
-        void x(double val)
-        pure nothrow @safe @nogc
-        {
-            this.dat[0] = val;
-        }
-
-        void y(double val)
-        pure nothrow @safe @nogc
-        {
-            this.dat[1] = val;
-        }
-
-        void z(double val)
-        pure nothrow @safe @nogc
-        {
-            this.dat[2] = val;
-        }
-
         double dot(const Vec3 rhs)
         pure nothrow @safe @nogc const
         {
@@ -108,10 +98,20 @@ struct Vec3 {
             return sqrt(this.normSq());
         }
 
-        Vec3 opBinary(string op : "+")(const Vec3 rhs)
-        pure nothrow @safe @nogc const
+        Vec3 dup()
+        pure nothrow @safe const
         {
-            Vec3 sum;
+            Vec3 copy = new Vec3;
+            copy.dat[0] = this.dat[0];
+            copy.dat[1] = this.dat[1];
+            copy.dat[2] = this.dat[2];
+            return copy;
+        }
+
+        Vec3 opBinary(string op : "+")(const Vec3 rhs)
+        pure nothrow @safe const
+        {
+            Vec3 sum = new Vec3;
             sum.dat[0] = this.dat[0] + rhs.dat[0];
             sum.dat[1] = this.dat[1] + rhs.dat[1];
             sum.dat[2] = this.dat[2] + rhs.dat[2];
@@ -119,9 +119,9 @@ struct Vec3 {
         }
 
         Vec3 opBinary(string op : "-")(const Vec3 rhs)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec3 diff;
+            Vec3 diff = new Vec3;
             diff.dat[0] = this.dat[0] - rhs.dat[0];
             diff.dat[1] = this.dat[1] - rhs.dat[1];
             diff.dat[2] = this.dat[2] - rhs.dat[2];
@@ -129,9 +129,9 @@ struct Vec3 {
         }
 
         Vec3 opBinary(string op : "*")(double rhs)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec3 prod;
+            Vec3 prod = new Vec3;
             prod.dat[0] = this.dat[0]*rhs;
             prod.dat[1] = this.dat[1]*rhs;
             prod.dat[2] = this.dat[2]*rhs;
@@ -139,20 +139,19 @@ struct Vec3 {
         }
 
         Vec3 opBinaryRight(string op : "*")(double lhs)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec3 prod;
+            Vec3 prod = new Vec3;
             prod.dat[0] = lhs*this.dat[0];
             prod.dat[1] = lhs*this.dat[1];
             prod.dat[2] = lhs*this.dat[2];
             return prod;
         }
 
-
         Vec3 opBinary(string op : "/")(double rhs)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec3 quot;
+            Vec3 quot = new Vec3;
             immutable double rcpr = 1.0 / rhs;
             quot.dat[0] = this.dat[0]*rcpr;
             quot.dat[1] = this.dat[1]*rcpr;
@@ -160,7 +159,7 @@ struct Vec3 {
             return quot;
         }
 
-        void opOpAssign(string op : "+")(const Vec3 rhs)
+        void opOpAssign(string op : "+")(Vec3 rhs)
         pure nothrow @safe @nogc
         {
             this.dat[0] += rhs.dat[0];
@@ -168,7 +167,7 @@ struct Vec3 {
             this.dat[2] += rhs.dat[2];
         }
 
-        void opOpAssign(string op : "-")(const Vec3 rhs)
+        void opOpAssign(string op : "-")(Vec3 rhs)
         pure nothrow @safe @nogc
         {
             this.dat[0] -= rhs.dat[0];
@@ -194,9 +193,9 @@ struct Vec3 {
         }
 
         Vec3 cross(const Vec3 rhs)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
-            Vec3 cross;
+            Vec3 cross = new Vec3;
             cross.dat[0] = this.dat[1]*rhs.dat[2] - this.dat[2]*rhs.dat[1];
             cross.dat[1] = this.dat[2]*rhs.dat[0] - this.dat[0]*rhs.dat[2];
             cross.dat[2] = this.dat[0]*rhs.dat[1] - this.dat[1]*rhs.dat[0];
@@ -227,7 +226,7 @@ struct Vec3 {
         }
 
         Vec3 normal()
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
             return this / this.norm;
         }
@@ -239,14 +238,14 @@ struct Vec3 {
         }
 
         Vec3 component(const Vec3 v)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
             immutable double factor = this.dot(v) / v.normSq;
             return v * factor;
         }
 
         Vec3 orthogonalComponent(const Vec3 v)
-        pure nothrow @safe @nogc const
+        pure nothrow @safe const
         {
             return this - this.component(v);
         }
@@ -278,8 +277,8 @@ struct Vec3 {
 /*  Vector addition unit test. Test for "u + v" for vectors u and v.          */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 u = Vec3(4, 5, 6);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 u = new Vec3(4, 5, 6);
     Vec3 sum = v + u;
     assert(sum.x == 5.0);
     assert(sum.y == 7.0);
@@ -289,8 +288,8 @@ pure nothrow @safe unittest
 /*  Vector subtraction unit test. Test for "u - v" for vectors u and v.       */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 u = Vec3(4, 5, 6);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 u = new Vec3(4, 5, 6);
     Vec3 diff = u - v;
     assert(diff.x == 3.0);
     assert(diff.y == 3.0);
@@ -300,7 +299,7 @@ pure nothrow @safe unittest
 /*  Scalar multiplication unit test. Test for "a * v" for vector v and real a.*/
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     immutable double a = 2.0;
     Vec3 prod = a*v;
     assert(prod.x == 2.0);
@@ -311,7 +310,7 @@ pure nothrow @safe unittest
 /*  Scalar multiplication unit test. Test for "v * a" for vector v and real a.*/
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     immutable double a = 2.0;
     Vec3 prod = v*a;
     assert(prod.x == 2.0);
@@ -322,7 +321,7 @@ pure nothrow @safe unittest
 /*  Scalar division unit test. Test for "v / a" for vector v and real a.      */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(2, 4, 6);
+    Vec3 v = new Vec3(2, 4, 6);
     immutable double a = 2.0;
     Vec3 prod = v/a;
     assert(prod.x == 1.0);
@@ -333,8 +332,8 @@ pure nothrow @safe unittest
 /*  Tests for op assignment for vector addition. "v += u" for vectors v, u.   */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 u = Vec3(4, 5, 6);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 u = new Vec3(4, 5, 6);
     v += u;
     assert(v.x == 5.0);
     assert(v.y == 7.0);
@@ -344,8 +343,8 @@ pure nothrow @safe unittest
 /*  Tests for op assignment for vector subtraction. "u -= v" for vectors u, v.*/
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 u = Vec3(4, 5, 6);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 u = new Vec3(4, 5, 6);
     u -= v;
     assert(u.x == 3.0);
     assert(u.y == 3.0);
@@ -355,7 +354,7 @@ pure nothrow @safe unittest
 /*  Tests for op assignment for scalar multiplication. "v *= a".              */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     immutable double a = 2.0;
     v *= a;
     assert(v.x == 2.0);
@@ -366,7 +365,7 @@ pure nothrow @safe unittest
 /*  Tests for op assignment for scalar division. "v /= a".                    */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(2, 4, 6);
+    Vec3 v = new Vec3(2, 4, 6);
     immutable double a = 2.0;
     v /= a;
     assert(v.x == 1.0);
@@ -377,7 +376,7 @@ pure nothrow @safe unittest
 /*  Test for the projection functions x(), y(), and z().                      */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     assert(v.x == 1.0);
     assert(v.y == 2.0);
     assert(v.z == 3.0);
@@ -386,8 +385,8 @@ pure nothrow @safe unittest
 /*  Test for the Euclidean dot product. This is the "dot" member function.    */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 w = Vec3(4, 5, 6);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 w = new Vec3(4, 5, 6);
     immutable double dot = v.dot(w);
     immutable double ans = 32.0;
     assert(dot == ans);
@@ -396,7 +395,7 @@ pure nothrow @safe unittest
 /*  This tests the square of the Euclidean norm. Computes ||v||^2.            */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     immutable double nsq = v.normSq;
     immutable double ans = 14.0;
     assert(nsq == ans);
@@ -406,7 +405,7 @@ pure nothrow @safe unittest
 pure nothrow @safe unittest
 {
     import std.math : fabs;
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     immutable double norm = v.norm;
     immutable double ans = 3.7416573867739413;
     immutable double err = fabs(norm - ans);
@@ -419,8 +418,8 @@ pure nothrow @safe unittest
 /*  Test for the cross product. z = x cross y using the right hand rule.      */
 pure nothrow @safe unittest
 {
-    Vec3 x = Vec3(1, 0, 0);
-    Vec3 y = Vec3(0, 1, 0);
+    Vec3 x = new Vec3(1, 0, 0);
+    Vec3 y = new Vec3(0, 1, 0);
     Vec3 z = x.cross(y);
     assert(z.x == 0.0);
     assert(z.y == 0.0);
@@ -430,8 +429,8 @@ pure nothrow @safe unittest
 /*  Test for the cross product. z = x cross y using the right hand rule.      */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 0, 0);
-    Vec3 y = Vec3(0, 1, 0);
+    Vec3 v = new Vec3(1, 0, 0);
+    Vec3 y = new Vec3(0, 1, 0);
     v.crossWith(y);
     assert(v.x == 0.0);
     assert(v.y == 0.0);
@@ -442,7 +441,7 @@ pure nothrow @safe unittest
 pure nothrow @safe unittest
 {
     import std.math : fabs;
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     immutable double rho = v.rho;
     immutable double ans = 2.23606797749979;
     immutable double err = fabs(rho - ans);
@@ -453,7 +452,7 @@ pure nothrow @safe unittest
 /*  Unit test for the square of the azimuthal component of a vector.          */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     immutable double rsq = v.rhoSq;
     immutable double ans = 5.0;
     assert(rsq == ans);
@@ -463,7 +462,7 @@ pure nothrow @safe unittest
 pure nothrow @safe unittest
 {
     import std.math : fabs;
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     Vec3 u = v.normal;
     immutable double ans = 1.0;
     immutable double err = fabs(u.norm - 1.0);
@@ -475,7 +474,7 @@ pure nothrow @safe unittest
 pure nothrow @safe unittest
 {
     import std.math : fabs;
-    Vec3 v = Vec3(1, 2, 3);
+    Vec3 v = new Vec3(1, 2, 3);
     v.normalize;
     immutable double ans = 1.0;
     immutable double err = fabs(v.norm - 1.0);
@@ -486,8 +485,8 @@ pure nothrow @safe unittest
 /*  Test for vector component function, or the vector projection function.    */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 1, 1);
-    Vec3 x = Vec3(1, 0, 0);
+    Vec3 v = new Vec3(1, 1, 1);
+    Vec3 x = new Vec3(1, 0, 0);
     Vec3 proj = v.component(x);
     assert(proj.x == 1.0);
     assert(proj.y == 0.0);
@@ -497,8 +496,8 @@ pure nothrow @safe unittest
 /*  Test for the square of the Euclidean distance between two vectors.        */
 pure nothrow @safe unittest
 {
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 u = Vec3(4, 5, 6);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 u = new Vec3(4, 5, 6);
     immutable double ans = 27.0;
     immutable double dsq = v.distSq(u);
     assert(dsq == ans);
@@ -508,8 +507,8 @@ pure nothrow @safe unittest
 pure nothrow @safe unittest
 {
     import std.math : fabs;
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 u = Vec3(4, 5, 6);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 u = new Vec3(4, 5, 6);
     immutable double ans = 5.196152422706632;
     immutable double dst = v.dist(u);
     immutable double err = fabs(ans - dst);
@@ -521,8 +520,8 @@ pure nothrow @safe unittest
 pure nothrow @safe unittest
 {
     import std.math : fabs;
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 y = Vec3(0, 1, 0);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 y = new Vec3(0, 1, 0);
     immutable double proj = v.project(y);
     immutable double ans = 2.0;
     immutable double err = fabs(proj - ans);
@@ -534,8 +533,8 @@ pure nothrow @safe unittest
 pure nothrow @safe unittest
 {
     import std.math : fabs;
-    Vec3 v = Vec3(1, 2, 3);
-    Vec3 u = Vec3(4, 5, 6);
+    Vec3 v = new Vec3(1, 2, 3);
+    Vec3 u = new Vec3(4, 5, 6);
     Vec3 comp = v.component(u);
     Vec3 orth = v.orthogonalComponent(u);
     Vec3 sum = comp + orth;

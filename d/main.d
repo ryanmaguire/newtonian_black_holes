@@ -22,8 +22,27 @@ import nbh;
 
 void main()
 {
-    nbh.vec3.Vec3 p = new nbh.vec3.Vec3(1, 1, 1);
-    nbh.vec3.Vec3 v = p.dup;
-    nbh.vec6.Vec6 u = new Vec6(p, v);
-    writeln(u);
+    nbh.ppm.PPM ppm = nbh.ppm.PPM("test.ppm");
+    uint x, y;
+    nbh.vec6.Vec6 u;
+    nbh.color.Color c;
+    immutable nbh.vec3.Vec3 vstart = nbh.vec3.Vec3(0.0, 0.0, -1.0);
+    immutable double prog_factor = 100.0 / cast(double)nbh.setup.ysize;
+
+    for (y = 0U; y < nbh.setup.ysize; ++y)
+    {
+        for (x = 0U; x < nbh.setup.xsize; ++x)
+        {
+            u.pos = nbh.tools.pixelToPoint(x, y);
+            u.vel = vstart;
+            path(u, &nbh.tools.gravity, &nbh.tools.stop);
+            c = nbh.color.checkerBoard(u.pos);
+            c.write(ppm);
+        }
+
+        if ((y % 20U) == 0U)
+            writeln(prog_factor * cast(double)y);
+    }
+
+    ppm.close;
 }
