@@ -73,7 +73,9 @@ These newer benchmarks used a Ryzen 9 7950x on Debian 12.
 | -------- | -------------- | -------- | ---------------------------------------- |
 | C        | gcc            |   11.396 | gcc (Debian 12.2.0-14) 12.2.0            |
 | C++      | g++            |   11.840 | g++ (Debian 12.2.0-14) 12.2.0            |
+| D        | gdc            |   12.186 | gdc (Debian 12.2.0-14) 12.2.0            |
 | C        | clang          |   12.199 | Debian clang version 14.0.6              |
+| D        | ldc            |   12.204 | LLVM D Compiler (1.30.0)                 |
 | Swift    | swiftc         |   12.216 | Swift version 5.9 (swift-5.9-RELEASE)    |
 | C++      | clang++        |   12.361 | Debian clang version 14.0.6              |
 | Fortran  | gfortran       |   12.633 | GNU Fortran (Debian 12.2.0-14) 12.2.0    |
@@ -83,6 +85,7 @@ These newer benchmarks used a Ryzen 9 7950x on Debian 12.
 | Go       | golang         |   18.118 | go 1.19.8                                |
 | Pascal   | fpc            |   18.755 | Free Pascal Compiler 3.2.2 20230330      |
 | Go       | gccgo          |   18.932 | gccgo (Debian 12.2.0-14) 12.2.0          |
+| D        | dmd            |   35.832 | DMD64 D Compiler v2.107.0                |
 | C        | pcc            |   62.625 | Portable C Compiler 1.2.0.DEVEL 20220331 |
 | C        | tcc            |   70.031 | tcc version 0.9.27                       |
 | Python   | CPython        | 1876.293 | Python 3.11.2                            |
