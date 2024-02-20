@@ -24,8 +24,9 @@
 ;   Date:   2023/09/21                                                         ;
 ;------------------------------------------------------------------------------;
 FUNCTION GRAVITY, P
+    COMPILE_OPT IDL2
     ON_ERROR, 2
-    NORM_P = NORM(P)
+    NORM_P = L2_NORM(P)
     NORM_P_SQUARED = NORM_P * NORM_P
     RETURN, -P / (NORM_P * NORM_P_SQUARED)
 END

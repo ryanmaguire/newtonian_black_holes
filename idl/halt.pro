@@ -24,13 +24,14 @@
 ;   Date:   2023/09/21                                                         ;
 ;------------------------------------------------------------------------------;
 FUNCTION HALT, P
+    COMPILE_OPT IDL2
     ON_ERROR, 2
     Z_DETECTOR = 10.0D
     BLACK_HOLE_RADIUS_SQUARED = 1.0D
 
     IF P[2] GE Z_DETECTOR THEN BEGIN
         RETURN, 1
-    ENDIF ELSE IF NORM_SQUARED(P) LE BLACK_HOLE_RADIUS_SQUARED THEN BEGIN
+    ENDIF ELSE IF L2_NORM_SQUARED(P) LE BLACK_HOLE_RADIUS_SQUARED THEN BEGIN
         RETURN, 1
     ENDIF
 

@@ -18,12 +18,13 @@
 ;   <https://www.gnu.org/licenses/>.                                           ;
 ;------------------------------------------------------------------------------;
 ;   Purpose:                                                                   ;
-;       Computes the Euclidean norm of a vector.                               ;
+;       Computes the square of the Euclidean norm of a vector.                 ;
 ;------------------------------------------------------------------------------;
 ;   Author: Ryan Maguire                                                       ;
 ;   Date:   2023/09/21                                                         ;
 ;------------------------------------------------------------------------------;
-FUNCTION NORM, P
+FUNCTION L2_NORM_SQUARED, P
+    COMPILE_OPT IDL2
     ON_ERROR, 2
-    RETURN, SQRT(TOTAL(P^2))
+    RETURN, TOTAL(P^2)
 END

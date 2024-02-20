@@ -24,6 +24,7 @@
 ;   Date:   2023/09/21                                                         ;
 ;------------------------------------------------------------------------------;
 FUNCTION SCALE_COLOR, SCALE_FACTOR, C
+    COMPILE_OPT IDL2
     ON_ERROR, 2
 
     RED   = UINT(SCALE_FACTOR * C[0])
@@ -31,4 +32,3 @@ FUNCTION SCALE_COLOR, SCALE_FACTOR, C
     BLUE  = UINT(SCALE_FACTOR * C[2])
     RETURN, [RED, GREEN, BLUE]
 END
-

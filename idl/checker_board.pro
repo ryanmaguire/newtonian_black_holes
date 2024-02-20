@@ -24,13 +24,14 @@
 ;   Date:   2023/09/21                                                         ;
 ;------------------------------------------------------------------------------;
 FUNCTION CHECKER_BOARD, P
+    COMPILE_OPT IDL2
     ON_ERROR, 2
     BLACK = [0, 0, 0]
     WHITE = [255, 255, 255]
     RED = [255, 0, 0]
     Z_DETECTOR = 10.0D
     Z_DETECTOR_SQUARED = 100.0D
-    COLOR_FACTOR = Z_DETECTOR_SQUARED / NORM_SQUARED(P)
+    COLOR_FACTOR = Z_DETECTOR_SQUARED / L2_NORM_SQUARED(P)
 
     IF P[2] LT Z_DETECTOR THEN BEGIN
         RETURN, BLACK

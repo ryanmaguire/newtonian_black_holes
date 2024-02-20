@@ -24,6 +24,7 @@
 ;   Date:   2023/09/20                                                         ;
 ;------------------------------------------------------------------------------;
 PRO MAIN
+    COMPILE_OPT IDL2
     START_TIME = SYSTIME(/SECONDS)
     XSIZE = 1024
     YSIZE = 1024

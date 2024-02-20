@@ -24,6 +24,7 @@
 ;   Date:   2023/09/21                                                         ;
 ;------------------------------------------------------------------------------;
 PRO EULER, P, V
+    COMPILE_OPT IDL2
     ON_ERROR, 2
     EULER_MAX_ITERS = 65535
     EULER_TIME_INCREMENT = 0.01
