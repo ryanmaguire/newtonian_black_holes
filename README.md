@@ -50,33 +50,7 @@ do look like what one might expect a black hole to be.
 ![Newtonian Black Hole](https://math.dartmouth.edu/~rmaguire/projects/newtonian_black_holes/newtonian_black_hole.png "Newtonian Black Hole")
 
 # Benchmarks
-The following used a Ryzen 9 3900x (12-core) on Debian 11.
-
-| Language | Implementation | Time (s) | Version                                  |
-| -------- | -------------- | -------- | ---------------------------------------- |
-| C        | gcc            |   15.067 | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
-| Java*    | openJDK        |   16.022 | openjdk 17.0.7 2023-04-18                |
-| Fortran  | gfortran       |   16.250 | GNU Fortran (Debian 10.2.1-6) 20210110   |
-| C        | clang          |   16.440 | Debian clang version 11.0.1-2            |
-| Python   | Pypy           |   18.324 | PyPy 7.3.5 with GCC 10.2.1 20210110      |
-| Swift*   | swiftc         |   19.004 | Swift version 5.8.1 (swift-5.8.1-RELEASE)|
-| Rust*    | rustc          |   21.160 | rustc 1.71.1 (eb26296b5 2023-08-03)      |
-| Pascal   | fpc            |   22.992 | Free Pascal Compiler 3.2.0 20210125      |
-| Go       | golang         |   23.883 | go 1.15.15                               |
-| Go       | gccgo          |   27.201 | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
-| C++      | g++            |   27.566 | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
-| C++      | clang++        |   29.547 | Debian clang version 11.0.1-2            |
-| C        | pcc            |   52.616 | Portable C Compiler 1.2.0.DEVEL 20200630 |
-| C        | tcc            |   80.480 | tcc version 0.9.27                       |
-| Python   | CPython        | 5552.407 | Python 3.9.2                             |
-| IDL      | GDL            | 9554.826 | GNU Data Language, Version 0.9.9         |
-
-Compilers marked with a * were release about two years after the others
-on the list. Hence this may be comparing apples and oranges. The newer
-benchmarks below use up-to-date implementations and are more
-suitable for comparisons.
-
-These newer benchmarks used a Ryzen 9 7950x on Debian 12.
+These benchmarks used a Ryzen 9 7950x on Debian 12.
 
 | Language | Implementation | Time (s) | Version                                  |
 | -------- | -------------- | -------- | ---------------------------------------- |
@@ -102,20 +76,7 @@ These newer benchmarks used a Ryzen 9 7950x on Debian 12.
 
 # Benchmarks (w/Parallelization) <a name="pbenchmarks"></a>
 I haven't made parellel versions in every language, but here are the benchmarks
-for those that have been done.
-
-Ryzen 9 3900x (12-core) on Debian 11.
-
-| Language | Implementation | Time (s) | Version                                  |
-| -------- | -------------- | -------- | ---------------------------------------- |
-| C        | gcc            |    1.322 | gcc (Debian 10.2.1-6) 10.2.1 20210110    |
-| C        | clang          |    1.704 | Debian clang version 11.0.1-2            |
-| C++      | clang++        |    1.995 | Debian clang version 11.0.1-2            |
-| C++      | g++            |    2.234 | g++ (Debian 10.2.1-6) 10.2.1 20210110    |
-| go       | golang         |    2.646 | go 1.15.15                               |
-| go       | gccgo          |    2.921 | gccgo (Debian 10.2.1-6) 10.2.1 20210110  |
-
-Ryzen 9 7950x (16-core) on Debian 12.
+for those that have been done. Ryzen 9 7950x (16-core) on Debian 12.
 
 | Language | Implementation | Time (s) | Version                                  |
 | -------- | -------------- | -------- | ---------------------------------------- |
