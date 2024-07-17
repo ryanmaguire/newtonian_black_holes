@@ -46,6 +46,7 @@ directory contains files to do exactly this.
 
 **This is not physically realistic**, obviously, but the resulting images
 do look like what one might expect a black hole to be.
+
 ![Newtonian Black Hole](https://math.dartmouth.edu/~rmaguire/assets/newtonian_black_hole.png "Newtonian Black Hole")
 
 # Benchmarks
