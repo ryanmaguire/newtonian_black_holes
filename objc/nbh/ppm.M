@@ -57,6 +57,9 @@
     /*  Create a PPM file with the default width, height, and type.           */
     - (void) create;
 
+    /*  Getter for the file pointer.                                          */
+    - (FILE *) file;
+
     /*  Close the PPM file (closes the file points the class contains).       */
     - (void) close;
 @end
@@ -111,6 +114,22 @@
      *  We use 8-bit color channels, which produce 24-bit RGB colors. The     *
      *  depth is then 2^8 - 1 = 255.                                          */
     fprintf(fp, "P%d\n%u %u\n255\n", typenum, x, y);
+}
+
+/******************************************************************************
+ *  Method:                                                                   *
+ *      file                                                                  *
+ *  Purpose:                                                                  *
+ *      Getter for the file pointer.                                          *
+ *  Arguments:                                                                *
+ *      None (void).                                                          *
+ *  Output:                                                                   *
+ *      fp (FILE *):                                                          *
+ *          The file pointer inside the PPM class.                            *
+ ******************************************************************************/
+- (FILE *) file
+{
+    return fp;
 }
 
 /******************************************************************************

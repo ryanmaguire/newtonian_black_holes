@@ -52,5 +52,61 @@
         (unsigned char) r Green: (unsigned char) g Blue: (unsigned char) b;
     - (void) writeToPPM: (PPM *) ppm;
     - (void) writeToFile: (FILE *) fp;
+    - (id) times: (double) t;
+    - (id) timesEqual: (double) t;
+@end
+
+@implementation Color
+
+- (id) init
+{
+    [super init];
+    red = 0x00U;
+    green = 0x00U;
+    blue = 0x00U;
+    return self;
+}
+
+- (id) init: (unsigned char) r Green: (unsigned char) g Blue: (unsigned char) b
+{
+    [super init];
+    red = r;
+    green = g;
+    blue = b;
+    return self;
+}
+
+- (void) writeToFile: (FILE *) fp
+{
+    fputc((int)red, fp);
+    fputc((int)green, fp);
+    fputc((int)blue, fp);
+}
+
+- (void) writeToPPM: (PPM *) ppm
+{
+    [self writeToFile: [ppm file]];
+}
+
+- (id) times: (double) t
+{
+    const unsigned char r = (unsigned char)(t * (double)red);
+    const unsigned char g = (unsigned char)(t * (double)green);
+    const unsigned char b = (unsigned char)(t * (double)blue);
+    Color *prod = [Color alloc];
+
+    if (!prod)
+        return prod;
+
+    return [prod init: r Green: g Blue: b];
+}
+
+- (id) timesEqual: (double) t
+{
+    red = (unsigned char)(t * (double)red);
+    green = (unsigned char)(t * (double)green);
+    blue = (unsigned char)(t * (double)blue);
+    return self;
+}
 
 @end

@@ -1,9 +1,8 @@
-#import "nbh/vec3.M"
-#import "nbh/vec6.M"
-#import "nbh/ppm.M"
-#import "nbh/color.M"
-#import "nbh/function_types.M"
-
+#include "nbh/vec3.M"
+#include "nbh/vec6.M"
+#include "nbh/ppm.M"
+#include "nbh/color.M"
+#include "nbh/function_types.M"
 
 void destroy(id *val)
 {

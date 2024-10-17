@@ -131,6 +131,7 @@
     /*  Performs scalar multiplication in-place without creating a new object.*/
     - (id) timesEqual: (double) scale;
 @end
+
 /*  Implement the Vec6 class with all of its methods.                         */
 @implementation Vec6
 
