@@ -28,7 +28,7 @@ import Foundation
 #endif
 
 struct PPM {
-    var file: Optional<UnsafeMutablePointer<FILE>>
+    var file: UnsafeMutablePointer<FILE>
 
     init(name: String) {
         file = fopen(name, "w")
