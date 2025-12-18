@@ -1,4 +1,4 @@
-#import "vec3.M"
+#import "vec3.objc.m"
 
 /*  The z value for the source.                                               */
 static const double zSrc = 10.0;

@@ -42,7 +42,7 @@
 #include <stdio.h>
 
 /*  Vec3 class provided here.                                                 */
-#import "vec3.M"
+#import "vec3.objc.m"
 
 /*  Basic 6D vector class.                                                    */
 @interface Vec6:NSObject

@@ -39,7 +39,7 @@
 #include <stdio.h>
 
 /*  PPM struct provided here.                                                 */
-#import "ppm.M"
+#import "ppm.objc.m"
 
 /*  Class for working with colors in a PPM file.                              */
 @interface Color:NSObject

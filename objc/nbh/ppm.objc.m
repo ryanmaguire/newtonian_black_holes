@@ -39,7 +39,7 @@
 #include <stdio.h>
 
 /*  Default parameters for the black hole and camera found here.              */
-#import "setup.M"
+#import "setup.objc.m"
 
 /*  Object for creating PPM files and writing colors to them.                 */
 @interface PPM:NSObject

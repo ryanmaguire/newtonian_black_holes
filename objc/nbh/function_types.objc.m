@@ -25,13 +25,13 @@
  ******************************************************************************/
 
 /*  3D vectors found here.                                                    */
-#import "vec3.M"
+#import "vec3.objc.m"
 
 /*  6D vectors defined here.                                                  */
-#import "vec6.M"
+#import "vec6.objc.m"
 
 /*  Colors for working with PPM files provided here.                          */
-#import "color.M"
+#import "color.objc.m"
 
 /*  Functions for describing equations of motion.                             */
 typedef id (*acceleration)(const Vec3 * const);
