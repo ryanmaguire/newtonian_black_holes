@@ -47,7 +47,7 @@ directory contains files to do exactly this.
 **This is not physically realistic**, obviously, but the resulting images
 do look like what one might expect a black hole to be.
 
-![Newtonian Black Hole](https://math.dartmouth.edu/~rmaguire/projects/newtonian_black_holes/newtonian_black_hole.png "Newtonian Black Hole")
+![Newtonian Black Hole](https://github.com/ryanmaguire/newtonian_black_holes/blob/main/assets/newtonian_black_hole.png "Newtonian Black Hole")
 
 # Benchmarks
 These benchmarks used a Ryzen 9 7950x on Debian 12.
